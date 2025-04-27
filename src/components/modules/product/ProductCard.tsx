@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { Heart, Star } from 'lucide-react';
-import { ProductType } from '@/types';
+import { ProductType } from '@/types/interface';
 import Color from './Color';
 
 const ProductCard = ({ product }: { product: ProductType }) => {

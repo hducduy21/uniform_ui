@@ -8,7 +8,6 @@ const product = products[0]
 
 const ProductDetail = () => {
   const { id } = useParams<{ id: string }>()
-  const [selectedColor, setSelectedColor] = useState("pink")
   const [selectedSize, setSelectedSize] = useState("M")
   const [quantity, setQuantity] = useState(1)
   const [activeImage, setActiveImage] = useState(0)
@@ -22,19 +21,6 @@ const ProductDetail = () => {
 
   const increaseQuantity = () => {
     setQuantity(quantity + 1)
-  }
-
-  const getColorClass = (color: string) => {
-    const colorMap: Record<string, string> = {
-      white: "bg-white border border-gray-300",
-      black: "bg-black",
-      beige: "bg-amber-100",
-      olive: "bg-olive-600",
-      teal: "bg-teal-700",
-      lightblue: "bg-sky-200",
-      pink: "bg-pink-200",
-    }
-    return colorMap[color] || "bg-gray-200"
   }
 
   return (

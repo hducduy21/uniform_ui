@@ -1,5 +1,6 @@
 import images from "@/assets";
-import { CategoryType, ProductType } from "@/types";
+import { FilterType } from "@/types/type";
+import { CategoryType, ProductType } from "@/types/interface";
 
 export const products: ProductType[] = [
     {
@@ -192,3 +193,22 @@ export const categories: CategoryType[] = [
     },
   ];
 
+export  const filtersMock : FilterType = {
+    categories: [
+      { id: "tops", label: "Tops & T-Shirts" },
+      { id: "outerwear", label: "Outerwear" },
+      { id: "bottoms", label: "Bottoms" },
+      { id: "dresses", label: "Dresses & Skirts" },
+      { id: "accessories", label: "Accessories" },
+    ],
+    status: [
+        { id: "feature", label: "Feature" },
+    ],
+    priceRanges: [
+      { id: "under100", label: "Under $100", range: [0, 100] as [number, number] },
+      { id: "100to200", label: "$100 - $200", range: [100, 200] as [number, number] },
+      { id: "200to300", label: "$200 - $300", range: [200, 300] as [number, number] },
+      { id: "300to500", label: "$300 - $500", range: [300, 500] as [number, number] },
+      { id: "500plus", label: "$500+", range: [500, 10000] as [number, number] },
+    ],
+  }
