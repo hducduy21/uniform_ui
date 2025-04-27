@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { Heart, Star } from 'lucide-react';
 import { ProductType } from '@/types';
+import Color from './Color';
 
 const ProductCard = ({ product }: { product: ProductType }) => {
 
@@ -24,14 +25,14 @@ const ProductCard = ({ product }: { product: ProductType }) => {
         {/* Product colors */}
         <div className='flex flex-wrap gap-1 mt-2'>
           {product.colors.map((color, idx) => (
-            <div key={idx} className={`h-5 w-5 rounded-full border border-gray-300`} style={{backgroundColor: color}} />
+            <Color item={color} />
           ))}
         </div>
 
         {/* Product details */}
         <div className='mt-2'>
           <div className='mb-1 text-xs text-gray-500'>
-            {product.category} <span className='ml-2'>{product.sizeRange}</span>
+            {product.category} <span className='ml-2'>{product.sizes.sizeTitle}</span>
           </div>
           <Link to={`/product/${product.id}`} className='block'>
             <h3 className='text-sm font-medium'>{product.name}</h3>
@@ -41,7 +42,7 @@ const ProductCard = ({ product }: { product: ProductType }) => {
           <div className='flex items-center mt-1'>
             <div className='flex items-center'>
               <span className='mr-1 text-xs'>
-                <Star className='w-4 h-4 fill-black-400' />
+                <Star fill='black' className='w-4 h-4' />
               </span>
               <span className='text-xs'>{product.rating}</span>
             </div>

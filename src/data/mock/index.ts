@@ -22,7 +22,7 @@ export const products: ProductType[] = [
             { id: 5, name: "Teal", hexCode: "#008080" },
             { id: 6, name: "Light Blue", hexCode: "#add8e6" }
         ],
-        images: [images.product1],
+        images: [images.product1, images.product2, images.product3],
         madeInInfo: "Made from recycled materials",
     },
     {
