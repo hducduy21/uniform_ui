@@ -6,28 +6,11 @@ import CategoryDropdown from './CategoryDropdown';
 import LanguageSwitcher from './LanguageSwitcher';
 import { Heart, ShoppingBag } from 'lucide-react';
 import images from '@/assets';
+import { categories } from '@/data/mock'; 
 
 const Header = () => {
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const dispatch = useDispatch();
-
-  const categories = [
-    {
-      id: 'men',
-      name: 'MEN',
-      subcategories: ['T-Shirts', 'Shirts', 'Pants', 'Outerwear', 'Accessories'],
-    },
-    {
-      id: 'women',
-      name: 'WOMEN',
-      subcategories: ['T-Shirts', 'Blouses', 'Skirts', 'Dresses', 'Accessories'],
-    },
-    {
-      id: 'kids',
-      name: 'KIDS',
-      subcategories: ['Boys', 'Girls', 'Babies', 'Toddlers', 'Accessories'],
-    },
-  ];
 
   const handleCategoryClick = (categoryId: string) => {
     if (openDropdown === categoryId) {

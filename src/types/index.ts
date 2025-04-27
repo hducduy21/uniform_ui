@@ -3,15 +3,27 @@ export interface ProductType {
   name: string
   price: string
   category: string
-  sizeRange: string
+  sizes: SizesType
   rating: number
   reviewCount: number
-  colors: string[]
+  colors: ColorType[]
   images: string[]
   madeInInfo: string
 }
 
-export interface Category {
+export interface ColorType{
+  id: number
+  name: string
+  hexCode: string
+}
+
+export interface SizesType{
+  id: number
+  sizeTitle: string
+  elements: string[]
+}
+
+export interface CategoryType {
     id: string
     name: string
     subcategories: string[]
