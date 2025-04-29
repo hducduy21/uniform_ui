@@ -11,6 +11,22 @@ export interface ProductType {
   madeInInfo: string
 }
 
+export interface ProductVariantType {
+  id: string
+  product: ProductType
+  size: String
+  color: String
+  imageUrl: string
+  costPrice: number
+  quantityInStock: number
+}
+
+export interface CartType {
+  id: string
+  quantity: number
+  productVariant: ProductVariantType
+}
+
 export interface ColorType{
   id: number
   name: string

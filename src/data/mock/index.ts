@@ -1,6 +1,6 @@
 import images from "@/assets";
 import { FilterType } from "@/types/type";
-import { CategoryType, ProductType } from "@/types/interface";
+import { CartType, CategoryType, ProductType } from "@/types/interface";
 
 export const products: ProductType[] = [
     {
@@ -239,3 +239,45 @@ export  const filtersMock : FilterType = {
       { id: "500plus", label: "$500+", range: [500, 10000] as [number, number] },
     ],
   }
+
+export const carts : CartType[] = [
+    {
+        id: "1",
+        quantity: 2,
+        productVariant: {
+            id: "1",
+            product: products[0],
+            size: "M",
+            color: "#ffffff",
+            imageUrl: images.product1,
+            costPrice: 23.52,
+            quantityInStock: 10,
+        }
+    },
+    {
+        id: "2",
+        quantity: 1,
+        productVariant: {
+            id: "2",
+            product: products[1],
+            size: "L",
+            color: "#000000",
+            imageUrl: images.product2,
+            costPrice: 31.36,
+            quantityInStock: 5,
+        }
+    },
+    {
+        id: "3",
+        quantity: 3,
+        productVariant: {
+            id: "3",
+            product: products[2],
+            size: "S",
+            color: "#f5f5dc",
+            imageUrl: images.product3,
+            costPrice: 31.36,
+            quantityInStock: 8,
+        }
+    }
+]
