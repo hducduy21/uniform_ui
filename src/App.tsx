@@ -3,6 +3,8 @@ import Home from "./pages/Home"
 import Layout from "./layouts/DefaultLayout"
 import Products from "./pages/Products"
 import ProductDetail from "./pages/ProductDetail"
+import Login from "./pages/Login"
+import Register from "./pages/Register"
 
 function App() {
   return (
@@ -11,6 +13,9 @@ function App() {
         <Route index element={<Home />} />
         <Route path="products" element={<Products />} />
         <Route path="product/:id" element={<ProductDetail />} />
+
+        <Route path="login" element={<Login />} />
+        <Route path="register" element={<Register />} />
       </Route>
     </Routes>
   )

@@ -26,8 +26,11 @@ export interface SizesType{
 export interface CategoryType {
     id: string
     name: string
-    subcategories: string[]
-  }
+    children: {
+        id: string
+        name: string
+    }[]
+}
   
 export interface SliderImage {
     id: string

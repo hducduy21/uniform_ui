@@ -35,16 +35,12 @@ body {
   background-position: center;
 }
 
-.category-dropdown {
+/* .category-dropdown {
   transform: translateY(-100%);
   transition: transform 0.3s ease-in-out;
   height: auto;
   overflow: hidden;
-}
-
-.category-dropdown.open {
-  transform: translateY(0);
-}
+} */
 
 .bottom-nav-button {
   width: 50px;

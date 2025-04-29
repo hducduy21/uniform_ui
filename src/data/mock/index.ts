@@ -175,23 +175,50 @@ export const products: ProductType[] = [
     }
 ];
 
-export const categories: CategoryType[] = [
+export const rootCategories: CategoryType[] = [
     {
-      id: 'men',
-      name: 'MEN',
-      subcategories: ['T-Shirts', 'Shirts', 'Pants', 'Outerwear', 'Accessories'],
+        id: 'men',
+        name: 'MEN',
+        children: [
+            {
+                id: 'men-clothing',
+                name: 'Clothing',
+            },
+            {
+                id: 'men-shoes',
+                name: 'Shoes',
+            }
+        ]
     },
     {
-      id: 'women',
-      name: 'WOMEN',
-      subcategories: ['T-Shirts', 'Blouses', 'Skirts', 'Dresses', 'Accessories'],
+        id: 'women',
+        name: 'WOMEN',
+        children: [
+            {
+                id: 'women-clothing',
+                name: 'Clothing',
+            },
+            {
+                id: 'women-shoes',
+                name: 'Shoes',
+            }
+        ]
     },
     {
-      id: 'kids',
-      name: 'KIDS',
-      subcategories: ['Boys', 'Girls', 'Babies', 'Toddlers', 'Accessories'],
-    },
-  ];
+        id: 'kids',
+        name: 'KIDS',
+        children: [
+            {
+                id: 'kids-clothing',
+                name: 'Clothing',
+            },
+            {
+                id: 'kids-toys',
+                name: 'Toys',
+            }
+        ]
+    }
+];
 
 export  const filtersMock : FilterType = {
     categories: [
