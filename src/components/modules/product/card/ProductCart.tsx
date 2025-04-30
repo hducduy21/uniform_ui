@@ -1,6 +1,6 @@
 import QuantitySelector from "@/components/form/QuantitySelector"
 import { CartType } from "@/types/interface"
-import { ChevronDown, X } from "lucide-react"
+import { X } from "lucide-react"
 
 type ProductCartProps = {
     cartItem: CartType
@@ -39,10 +39,10 @@ const ProductCart = ({cartItem, removeItem, updateQuantity}: ProductCartProps) =
               <QuantitySelector value={cartItem.quantity} onChange={(value) => updateQuantity(cartItem.id, value)} />
             </div>
 
-            {/* Subtotal */}
+            {/* Total */}
             <div className="flex justify-end mt-4">
               <div className="text-right">
-                <p className="text-sm text-gray-500">SUBTOTAL:</p>
+                <p className="text-sm text-gray-500">Total:</p>
                 <p className="text-base font-medium">{cartItem.quantity * cartItem.productVariant.costPrice}</p>
               </div>
             </div>

@@ -1,9 +1,10 @@
 import { useState, FormEvent, ChangeEvent, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import Input from '../components/form/Input';
+import Input from '../../components/form/Input';
 import CheckBox from '@/components/form/CheckBox';
 import Button from '@/components/form/Button';
 import Radio from '@/components/form/Radio';
+import { ErrorType } from '@/types/type';
 
 interface RegisterFormData {
   email: string;
@@ -28,7 +29,7 @@ const Register = () => {
     gender: 'MALE',
   });
   const [showPassword, setShowPassword] = useState(false);
-  const [errors, setErrors] = useState<Partial<Record<keyof RegisterFormData, string>>>({});
+  const [errors, setErrors] = useState<ErrorType<RegisterFormData>>({});
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { id, value } = e.target;
@@ -43,7 +44,7 @@ const Register = () => {
   };
 
   const validateForm = (): boolean => {
-    const newErrors: Partial<Record<keyof RegisterFormData, string>> = {};
+    const newErrors: ErrorType<RegisterFormData> = {};
 
     if (!formData.email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
       newErrors.email = 'Please enter a valid email address';

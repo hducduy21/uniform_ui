@@ -31,3 +31,5 @@ export type FilterType = {
   status: FilterOption[]
   priceRanges: { id: string; label: string; range: [number, number] }[]
 }
+
+export type ErrorType<T> = Partial<Record<keyof T, string>>;

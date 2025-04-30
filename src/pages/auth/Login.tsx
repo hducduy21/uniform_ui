@@ -1,9 +1,8 @@
 import { useState, FormEvent, ChangeEvent, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import Input from '../components/form/Input';
+import Input from '../../components/form/Input';
 import CheckBox from '@/components/form/CheckBox';
 import Button from '@/components/form/Button';
-import Radio from '@/components/form/Radio';
 
 interface LoginFormData {
   phoneNumber: string;
