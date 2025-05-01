@@ -1,20 +1,23 @@
-import { useEffect, useRef, useState } from "react";
+import { CategoryType } from "@/types/interface";
+import { useSelector } from "react-redux";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 
-interface Category {
-  id: string;
-  name: string;
-  subcategories: string[];
-}
-
 interface CategoryDropdownProps {
-  category: Category;
+  category: CategoryType[];
   isOpen: boolean;
   onClose: () => void;
 }
 
 const CategoryDropdown = ({ category, isOpen, onClose }: CategoryDropdownProps) => {
   const dropdownRef = useRef<HTMLDivElement>(null);
+
+  const activeCategory = useSelector((state: any) => state.category.activeCategory);
+
+  const categoryState = useMemo(() => {
+    return category.find((cat) => cat.id === activeCategory) || { children: [] };
+  }, [category, activeCategory]);
+
   useEffect(() => {
     if (!isOpen) return;
 
@@ -28,27 +31,24 @@ const CategoryDropdown = ({ category, isOpen, onClose }: CategoryDropdownProps) 
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [isOpen, onClose]);
 
-  const formatSubcategoryLink = (subcategory: string) =>
-    `/${category.id.toLowerCase()}/${subcategory.toLowerCase().replace(/\s+/g, "-")}`;
-
   return (
     <div
       ref={dropdownRef}
-      className={`category-dropdown fixed top-0 left-0 w-full bg-white z-40 shadow-md ${isOpen ? "open" : ""}`}
+      className={`category-dropdown fixed bot-0 left-0 w-full bg-white z-40 shadow-md ${isOpen ? "open" : " hidden"}`}
     >
       <div
-        className="container relative p-8 mx-auto overflow-hidden transition-all duration-500 ease-in-out"
+        className="container min-h-10 relative p-8 mx-auto overflow-hidden transition-all duration-500 ease-in-out"
         style={{ height: isOpen ? "auto" : "0" }}
       >
         <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-5">
-          {category.subcategories.map((subcategory, index) => (
+          {categoryState.children.map((category, index) => (
             <Link
               key={index}
-              to={formatSubcategoryLink(subcategory)}
+              to={''}
               className="py-1 text-gray-800 hover:text-black hover:underline"
               onClick={onClose}
             >
-              {subcategory}
+              {category.name}
             </Link>
           ))}
         </div>

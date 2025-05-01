@@ -1,22 +1,29 @@
 import { Link } from "react-router-dom"
 import { Home, Search, User } from "lucide-react"
+import { useState } from "react"
+import SearchOverlay from "./SearchOverLay"
 
 const BotNav = () => {
-//   const location = useLocation()
+  const [searchOpen, setSearchOpen] = useState(false)
+
+  const toggleSearch = () => {
+    setSearchOpen(!searchOpen)
+  }
 
   return (
-    <div className="fixed bottom-8 left-0 w-full z-50 flex justify-center">
+    <div className="fixed left-0 z-50 flex justify-center w-full bottom-8">
       <div className="flex space-x-12">
         <Link to="/" className="bottom-nav-button">
           <Home size={24} color="black" />
         </Link>
-        <button className="bottom-nav-button">
+        <button className="bottom-nav-button" onClick={toggleSearch}>
           <Search size={24} color="black" />
         </button>
         <button className="bottom-nav-button">
           <User size={24} color="black" />
         </button>
       </div>
+      <SearchOverlay isOpen={searchOpen} onClose={() => setSearchOpen(false)} />
     </div>
   )
 }
