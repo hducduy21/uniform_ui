@@ -1,4 +1,4 @@
-import { useState, FormEvent, ChangeEvent, useEffect } from 'react';
+import { useState, FormEvent, ChangeEvent } from 'react';
 import { Link } from 'react-router-dom';
 import Input from '../../components/form/Input';
 import CheckBox from '@/components/form/CheckBox';

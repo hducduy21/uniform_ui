@@ -9,6 +9,7 @@ import Cart from "./pages/Cart"
 import AccountLayout from "./layouts/AccountLayout"
 import ChangePassword from "./pages/account/ChangePassword"
 import Profile from "./pages/account/Profile"
+import WishList from "./pages/WishList"
 
 function App() {
   return (
@@ -19,10 +20,11 @@ function App() {
         <Route path="product/:id" element={<ProductDetail />} />
 
         <Route path="account" element={<AccountLayout />}>
-          <Route path="profile" element={<Profile />} />
+          <Route index path="profile" element={<Profile />} />
           <Route path="change-password" element={<ChangePassword />} />
         </Route>
         <Route path="cart" element={<Cart />} />
+        <Route path="wishlist" element={<WishList />} />
         <Route path="login" element={<Login />} />
         <Route path="register" element={<Register />} />
       </Route>
