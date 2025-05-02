@@ -1,9 +1,9 @@
 import { Link } from 'react-router-dom';
 import { Heart, Star } from 'lucide-react';
-import { ProductType } from '@/types/interface';
+import { ProductGeneralType } from '@/types/model';
 import Color from './Color';
 
-const ProductCard = ({ product }: { product: ProductType }) => {
+const ProductCard = ({ product }: { product: ProductGeneralType }) => {
 
   return (
     <>
@@ -12,7 +12,7 @@ const ProductCard = ({ product }: { product: ProductType }) => {
         <div className='relative'>
           <Link to={`/product/${product.id}`} className='block'>
             <img
-              src={product.images[0]}
+              src={product.imageUrl}
               alt={product.name}
               className='object-cover w-full h-125 w-72'
             />
@@ -32,13 +32,13 @@ const ProductCard = ({ product }: { product: ProductType }) => {
         {/* Product details */}
         <div className='mt-2'>
           <div className='mb-1 text-xs text-gray-500'>
-            {product.category} <span className='ml-2'>{product.sizes.sizeTitle}</span>
+            {product.category.name} <span className='ml-2'>{product.sizes.sizeTitle}</span>
           </div>
           <Link to={`/product/${product.id}`} className='block'>
             <h3 className='text-sm font-medium'>{product.name}</h3>
           </Link>
           <div className='mt-1 text-sm font-medium'>{product.price}</div>
-          <div className='mt-1 text-xs text-gray-500'>{product.madeInInfo}</div>
+          <div className='mt-1 text-xs text-gray-500'>{product.description}</div>
           <div className='flex items-center mt-1'>
             <div className='flex items-center'>
               <span className='mr-1 text-xs'>
@@ -46,7 +46,7 @@ const ProductCard = ({ product }: { product: ProductType }) => {
               </span>
               <span className='text-xs'>{product.rating}</span>
             </div>
-            <span className='ml-1 text-xs text-gray-500'>({product.reviewCount})</span>
+            <span className='ml-1 text-xs text-gray-500'>({product.rating})</span>
           </div>
         </div>
       </div>

@@ -13,11 +13,19 @@ import WishList from "./pages/WishList"
 import { AuthProvider } from "./context/AuthContext"
 import PrivateRoute from "./layouts/PrivateRoute"
 import AdminLayout from "./layouts/AdminLayout"
+import ProductManagement from "./pages/admin/ProductsManagement"
 
 function App() {
   return (
     <AuthProvider>
       <Routes>
+        {/* Admin Routes */}
+        <Route path="admin" element={<AdminLayout />}>
+              {/* <Route index element={<></> } /> */}
+              <Route path="products" element={<ProductManagement />} />
+        </Route>
+
+        {/* User Routes */}
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
           <Route path="products" element={<Products />} />
@@ -35,11 +43,6 @@ function App() {
           <Route path="login" element={<Login />} />
           <Route path="register" element={<Register />} />
           
-        </Route>
-
-        <Route path="/admin" element={<AdminLayout />}>
-              <Route index element={<Dashboard />} />
-              <Route path="products" element={<ProductManagement />} />
         </Route>
       </Routes>
     </AuthProvider>
