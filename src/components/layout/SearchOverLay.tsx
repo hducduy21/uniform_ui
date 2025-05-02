@@ -2,7 +2,7 @@ import type React from "react"
 
 import { useState, useEffect, useRef } from "react"
 import { useNavigate } from "react-router-dom"
-import { Search, Camera, Mic, X, Home, User } from "lucide-react"
+import { Search, X, Home, User } from "lucide-react"
 import { Link } from "react-router-dom"
 
 interface SearchOverlayProps {
