@@ -1,26 +1,26 @@
-export interface FilterOption {
+export type FilterOption = {
   id: string
   label: string
 }
-export interface AvailableFilters {
+export type AvailableFilters = {
   categories: FilterOption[];
   status: FilterOption[];
   priceRanges: PriceRangeOption[];
 }
 
-export interface PriceRangeOption {
+export type PriceRangeOption = {
   id: string;
   label: string;
   range: [number, number];
 }
 
-export interface FilterCategory {
+export type FilterCategory = {
   id: string
   label: string
   options: FilterOption[]
 }
 
-export interface FilterState {
+export type FilterState = {
   categories: string[]
   status: string[]
   priceRange: [number, number] | null

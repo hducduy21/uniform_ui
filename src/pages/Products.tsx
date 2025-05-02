@@ -3,7 +3,7 @@ import ProductCard from "@/components/modules/product/ProductCard"
 import { products } from "@/data/mock"
 import ProductFilter from "@/components/modules/product/filter/ProductFilter"
 import { filtersMock } from "@/data/mock"
-import { FilterState } from "@/types/type"
+import { FilterState } from "@/types/utils"
 
 const Products = () => {
   const [filters, setFilters] = useState<FilterState>({

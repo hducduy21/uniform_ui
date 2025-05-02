@@ -1,21 +1,15 @@
-import { useState, FormEvent, ChangeEvent, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { useState, FormEvent, ChangeEvent } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import Input from '../../components/form/Input';
 import CheckBox from '@/components/form/CheckBox';
 import Button from '@/components/form/Button';
 import Radio from '@/components/form/Radio';
-import { ErrorType } from '@/types/type';
+import { ErrorType } from '@/types/utils';
+import { RegisterFormData } from '@/types/dto';
+import { EGender } from '@/types/model';
+import { validateRegisterForm } from '@/utils/validate/Validate';
+import { useAuthContext } from '@/context/AuthContext';
 
-interface RegisterFormData {
-  email: string;
-  phoneNumber: string;
-  password: string;
-  confirmPassword: string;
-  firstName: string;
-  lastName: string;
-  birthday: string;
-  gender: 'MALE' | 'FEMALE';
-}
 
 const Register = () => {
   const [formData, setFormData] = useState<RegisterFormData>({
@@ -26,10 +20,12 @@ const Register = () => {
     firstName: '',
     lastName: '',
     birthday: '',
-    gender: 'MALE',
+    gender: EGender.MALE,
   });
   const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState<ErrorType<RegisterFormData>>({});
+  const {register} = useAuthContext();
+  const navigate = useNavigate();
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { id, value } = e.target;
@@ -39,44 +35,19 @@ const Register = () => {
     }
   };
 
-  const handleGenderChange = (value: 'MALE' | 'FEMALE') => {
+  const handleGenderChange = (value: EGender) => {
     setFormData((prev) => ({ ...prev, gender: value }));
   };
-
-  const validateForm = (): boolean => {
-    const newErrors: ErrorType<RegisterFormData> = {};
-
-    if (!formData.email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
-      newErrors.email = 'Please enter a valid email address';
-    }
-    if (!formData.phoneNumber.match(/^\+?[\d\s-]{10,}$/)) {
-      newErrors.phoneNumber = 'Please enter a valid phone number';
-    }
-    if (formData.password.length < 8) {
-      newErrors.password = 'Password must be at least 8 characters';
-    }
-    if (formData.password !== formData.confirmPassword) {
-      newErrors.confirmPassword = 'Passwords do not match';
-    }
-    if (!formData.firstName.trim()) {
-      newErrors.firstName = 'First name is required';
-    }
-    if (!formData.lastName.trim()) {
-      newErrors.lastName = 'Last name is required';
-    }
-    if (!formData.birthday) {
-      newErrors.birthday = 'Birthday is required';
-    }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
-  const handleRegister = (e: FormEvent<HTMLFormElement>) => {
+  
+  const handleRegister = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    
-    if (validateForm()) {
-      console.log('Form submitted:', formData);
+
+    const validationErrors = validateRegisterForm(formData);
+    setErrors(validationErrors);
+
+    if (Object.keys(validationErrors).length === 0) {
+      await register(formData)
+      navigate('/login', { replace: true });
     }
   };
 
@@ -144,6 +115,7 @@ const Register = () => {
                   onChange={handleChange}
                   required
                   error={errors.birthday}
+                  max={new Date().toISOString().split('T')[0]}
                 />
                 <div>
                   <label className="block mb-1 text-sm font-medium text-gray-700">
@@ -154,17 +126,25 @@ const Register = () => {
                       id="male"
                       label="Male"
                       name="gender"
-                      value="MALE"
-                      checked={formData.gender === 'MALE'}
-                      onChange={() => handleGenderChange('MALE')}
+                      value={EGender.MALE}
+                      checked={formData.gender === EGender.MALE}
+                      onChange={() => handleGenderChange(EGender.MALE)}
                     />
                     <Radio
                       id="female"
                       label="Female"
                       name="gender"
-                      value="FEMALE"
-                      checked={formData.gender === 'FEMALE'}
-                      onChange={() => handleGenderChange('FEMALE')}
+                      value={EGender.FEMALE}
+                      checked={formData.gender === EGender.FEMALE}
+                      onChange={() => handleGenderChange(EGender.FEMALE)}
+                    />
+                    <Radio
+                      id="other"
+                      label="Other"
+                      name="other"
+                      value={EGender.OTHER}
+                      checked={formData.gender === EGender.OTHER}
+                      onChange={() => handleGenderChange(EGender.OTHER)}
                     />
                   </div>
                 </div>

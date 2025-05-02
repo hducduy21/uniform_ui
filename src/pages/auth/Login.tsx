@@ -1,47 +1,44 @@
 import { useState, FormEvent, ChangeEvent } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import Input from '../../components/form/Input';
 import CheckBox from '@/components/form/CheckBox';
 import Button from '@/components/form/Button';
+import { LoginCredentials } from '@/types/dto';
+import { validateLoginForm } from '@/utils/validate/Validate';
+import { useAuthContext } from '@/context/AuthContext';
 
-interface LoginFormData {
-  phoneNumber: string;
-  password: string;
-}
 
 const Login = () => {
-  const [formData, setFormData] = useState<LoginFormData>({
-    phoneNumber: '',
+  const [formData, setFormData] = useState<LoginCredentials>({
+    email: '',
     password: ''
   });
   const [showPassword, setShowPassword] = useState(false);
-  const [errors, setErrors] = useState<Partial<Record<keyof LoginFormData, string>>>({});
+  const [errors, setErrors] = useState<Partial<Record<keyof LoginCredentials, string>>>({});
+
+  const navigate = useNavigate();
+  const location = useLocation();
+  const from = location.state?.from || '/';
+
+  const {login} = useAuthContext();
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { id, value } = e.target;
     setFormData((prev) => ({ ...prev, [id]: value }));
-    if (errors[id as keyof LoginFormData]) {
+    if (errors[id as keyof LoginCredentials]) {
       setErrors((prev) => ({ ...prev, [id]: undefined }));
     }
   };
-  const validateForm = (): boolean => {
-    const newErrors: Partial<Record<keyof LoginFormData, string>> = {};
-    if (!formData.phoneNumber.match(/^\+?[\d\s-]{10,}$/)) {
-      newErrors.phoneNumber = 'Please enter a valid phone number';
-    }
-    if (formData.password.length < 8) {
-      newErrors.password = 'Password must be at least 8 characters';
-    }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
-  const handleRegister = (e: FormEvent<HTMLFormElement>) => {
+  
+  const handleLogin = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     
-    if (validateForm()) {
-      console.log('Form submitted:', formData);
+    const validationErrors = validateLoginForm(formData);
+    setErrors(validationErrors);
+
+    if (Object.keys(validationErrors).length === 0) {
+      await login(formData)
+      navigate(from, { replace: true });
     }
   };
 
@@ -51,16 +48,16 @@ const Login = () => {
         <div className="p-8 bg-white border border-gray-100 rounded-lg shadow-md">
           <h1 className="mb-6 text-2xl font-bold text-center">Login</h1>
 
-          <form onSubmit={handleRegister} noValidate>
+          <form onSubmit={handleLogin} noValidate>
               {/* PhoneNumber Fields */}
               <Input
-                id="phoneNumber"
-                label="Phone Number"
-                type="tel"
-                value={formData.phoneNumber}
+                id="email"
+                label="Email"
+                type="text"
+                value={formData.email}
                 onChange={handleChange}
                 required
-                error={errors.phoneNumber}
+                error={errors.email}
               />
 
               {/* Password Fields */}

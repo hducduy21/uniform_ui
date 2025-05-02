@@ -1,4 +1,4 @@
-import { CategoryType } from "@/types/interface";
+import { CategoryType } from "@/types/model";
 import { useSelector } from "react-redux";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router-dom";

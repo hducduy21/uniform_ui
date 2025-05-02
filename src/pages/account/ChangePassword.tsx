@@ -2,13 +2,14 @@
 
 import CheckBox from "@/components/form/CheckBox"
 import Input from "@/components/form/Input"
-import { ErrorType } from "@/types/type"
+import { ErrorType } from "@/types/utils"
+import { validateChangePasswordForm } from "@/utils/validate/Validate"
 import type React from "react"
 
 import { ChangeEvent, useState } from "react"
 import { Link } from "react-router-dom"
 
-interface ChangePasswordFormData {
+export interface ChangePasswordFormData {
   currentPassword: string;
   password: string;
   confirmPassword: string;
@@ -32,23 +33,11 @@ const ChangePassword = () => {
       }
   };
 
-  const validateForm = (): boolean => {
-    const newErrors: ErrorType<ChangePasswordFormData> = {};
-    
-    if (formData.password.length < 8) {
-      newErrors.password = 'Password must be at least 8 characters';
-    }
-    if (formData.password !== formData.confirmPassword) {
-      newErrors.confirmPassword = 'Passwords do not match';
-    }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    if (validateForm()) {
+
+    setErrors(validateChangePasswordForm(formData))
+    if (Object.keys(errors).length > 0) {
       console.log('Form submitted:', formData);
     }
   }

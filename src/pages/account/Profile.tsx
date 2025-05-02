@@ -2,33 +2,25 @@ import type React from 'react';
 
 import { useState } from 'react';
 import Input from '@/components/form/Input';
-import { ErrorType } from '@/types/type';
+import { ErrorType } from '@/types/utils';
 import Radio from '@/components/form/Radio';
+import { EGender, User } from '@/types/model';
+import { validateEditProfileForm } from '@/utils/validate/Validate';
 
-interface AccountProfileData {
-  email: string;
-  phoneNumber: string;
-  password: string;
-  confirmPassword: string;
-  firstName: string;
-  lastName: string;
-  birthday: string;
-  gender: 'MALE' | 'FEMALE';
-}
+export type ProfileFormData = User
 
 const Profile = () => {
-  const [formData, setFormData] = useState<AccountProfileData>({
+  const [formData, setFormData] = useState<ProfileFormData>({
+    id: '',
     email: '',
     phoneNumber: '',
-    password: '',
-    confirmPassword: '',
     firstName: '',
     lastName: '',
     birthday: '',
-    gender: 'MALE',
+    gender: EGender.MALE,
   });
 
-  const [errors, setErrors] = useState<ErrorType<AccountProfileData>>({});
+  const [errors, setErrors] = useState<ErrorType<ProfileFormData>>({});
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value, type } = e.target;
@@ -40,42 +32,15 @@ const Profile = () => {
     });
   };
 
-  const handleGenderChange = (value: 'MALE' | 'FEMALE') => {
+  const handleGenderChange = (value: EGender) => {
     setFormData((prev) => ({ ...prev, gender: value }));
-  };
-
-  const validateForm = (): boolean => {
-    const newErrors: ErrorType<AccountProfileData> = {};
-
-    if (!formData.email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
-      newErrors.email = 'Please enter a valid email address';
-    }
-    if (!formData.phoneNumber.match(/^\+?[\d\s-]{10,}$/)) {
-      newErrors.phoneNumber = 'Please enter a valid phone number';
-    }
-    if (formData.password.length < 8) {
-      newErrors.password = 'Password must be at least 8 characters';
-    }
-    if (formData.password !== formData.confirmPassword) {
-      newErrors.confirmPassword = 'Passwords do not match';
-    }
-    if (!formData.firstName.trim()) {
-      newErrors.firstName = 'First name is required';
-    }
-    if (!formData.lastName.trim()) {
-      newErrors.lastName = 'Last name is required';
-    }
-    if (!formData.birthday) {
-      newErrors.birthday = 'Birthday is required';
-    }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (validateForm()) {
+
+    setErrors(validateEditProfileForm(formData));
+    if (Object.keys(errors).length === 0) {
       console.log('Form submitted:', formData);
     }
   };
@@ -94,7 +59,7 @@ const Profile = () => {
               id='firstName'
               label='First Name'
               type='text'
-              value={formData.firstName}
+              value={formData.firstName!}
               onChange={handleChange}
               required
               error={errors.firstName}
@@ -103,7 +68,7 @@ const Profile = () => {
               id='lastName'
               label='Last Name'
               type='text'
-              value={formData.lastName}
+              value={formData.lastName!}
               onChange={handleChange}
               required
               error={errors.lastName}
@@ -116,7 +81,7 @@ const Profile = () => {
               id='email'
               label='Email Address'
               type='email'
-              value={formData.email}
+              value={formData.email!}
               onChange={handleChange}
               placeholder='example@domain.com'
               required
@@ -126,7 +91,7 @@ const Profile = () => {
               id='phoneNumber'
               label='Phone Number'
               type='tel'
-              value={formData.phoneNumber}
+              value={formData.phoneNumber!}
               onChange={handleChange}
               placeholder='+84 123456789'
               required
@@ -140,7 +105,7 @@ const Profile = () => {
               id='birthday'
               label='Birthday'
               type='date'
-              value={formData.birthday}
+              value={formData.birthday!}
               onChange={handleChange}
               required
               error={errors.birthday}
@@ -154,17 +119,25 @@ const Profile = () => {
                   id='male'
                   label='Male'
                   name='gender'
-                  value='MALE'
-                  checked={formData.gender === 'MALE'}
-                  onChange={() => handleGenderChange('MALE')}
+                  value={EGender.MALE}
+                  checked={formData.gender === EGender.MALE}
+                  onChange={() => handleGenderChange(EGender.MALE)}
                 />
                 <Radio
                   id='female'
                   label='Female'
                   name='gender'
-                  value='FEMALE'
-                  checked={formData.gender === 'FEMALE'}
-                  onChange={() => handleGenderChange('FEMALE')}
+                  value={EGender.FEMALE}
+                  checked={formData.gender === EGender.FEMALE}
+                  onChange={() => handleGenderChange(EGender.FEMALE)}
+                />
+                <Radio
+                  id='other'
+                  label='Other'
+                  name='other'
+                  value={EGender.OTHER}
+                  checked={formData.gender === EGender.OTHER}
+                  onChange={() => handleGenderChange(EGender.OTHER)}
                 />
               </div>
             </div>

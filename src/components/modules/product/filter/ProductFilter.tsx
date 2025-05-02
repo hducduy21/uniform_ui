@@ -3,7 +3,7 @@ import type React from 'react';
 import { useState, useEffect, useCallback } from 'react';
 import { SlidersHorizontal, X } from 'lucide-react';
 import { FilterDropdown } from './FilterDropdown';
-import { FilterState, FilterType } from '@/types/type';
+import { FilterState, FilterType } from '@/types/utils';
 import { FilterButton } from './FilterButton';
 
 interface ProductFilterProps {
