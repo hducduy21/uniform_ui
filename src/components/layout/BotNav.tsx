@@ -19,9 +19,9 @@ const BotNav = () => {
         <button className="bottom-nav-button" onClick={toggleSearch}>
           <Search size={24} color="black" />
         </button>
-        <button className="bottom-nav-button">
+        <Link to="/account/profile" className="bottom-nav-button">
           <User size={24} color="black" />
-        </button>
+        </Link>
       </div>
       <SearchOverlay isOpen={searchOpen} onClose={() => setSearchOpen(false)} />
     </div>

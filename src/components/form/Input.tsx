@@ -1,6 +1,6 @@
 import { ChangeEvent } from 'react';
 
-interface InputProps {
+interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   id: string;
   label: string;
   type: string;
@@ -21,7 +21,8 @@ const Input = ({
   placeholder,
   disabled = false,
   required = false,
-  error
+  error,
+  ...props
 }: InputProps) => {
   return (
     <div className="mb-6">
@@ -40,6 +41,7 @@ const Input = ({
         disabled={disabled}
         required={required}
         className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+        {...props}
       />
 
       {error && (

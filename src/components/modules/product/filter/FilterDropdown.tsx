@@ -1,4 +1,4 @@
-import { AvailableFilters, FilterState } from "@/types/type";
+import { AvailableFilters, FilterState } from "@/types/utils";
 import { X } from "lucide-react"
 
 interface FilterDropdownProps {

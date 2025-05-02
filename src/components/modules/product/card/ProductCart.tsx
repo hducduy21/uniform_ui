@@ -1,5 +1,5 @@
 import QuantitySelector from "@/components/form/QuantitySelector"
-import { CartType } from "@/types/interface"
+import { CartType } from "@/types/model"
 import { X } from "lucide-react"
 
 type ProductCartProps = {

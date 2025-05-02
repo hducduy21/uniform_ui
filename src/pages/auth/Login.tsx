@@ -1,10 +1,11 @@
 import { useState, FormEvent, ChangeEvent } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import Input from '../../components/form/Input';
 import CheckBox from '@/components/form/CheckBox';
 import Button from '@/components/form/Button';
 import { LoginCredentials } from '@/types/dto';
 import { validateLoginForm } from '@/utils/validate/Validate';
+import { useAuthContext } from '@/context/AuthContext';
 
 
 const Login = () => {
@@ -15,6 +16,12 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState<Partial<Record<keyof LoginCredentials, string>>>({});
 
+  const navigate = useNavigate();
+  const location = useLocation();
+  const from = location.state?.from || '/';
+
+  const {login} = useAuthContext();
+
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { id, value } = e.target;
     setFormData((prev) => ({ ...prev, [id]: value }));
@@ -23,12 +30,15 @@ const Login = () => {
     }
   };
   
-  const handleRegister = (e: FormEvent<HTMLFormElement>) => {
+  const handleLogin = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     
-    setErrors(validateLoginForm(formData));
-    if (Object.keys(errors).length > 0) {
-      console.log('Form submitted:', formData);
+    const validationErrors = validateLoginForm(formData);
+    setErrors(validationErrors);
+
+    if (Object.keys(validationErrors).length === 0) {
+      await login(formData)
+      navigate(from, { replace: true });
     }
   };
 
@@ -38,7 +48,7 @@ const Login = () => {
         <div className="p-8 bg-white border border-gray-100 rounded-lg shadow-md">
           <h1 className="mb-6 text-2xl font-bold text-center">Login</h1>
 
-          <form onSubmit={handleRegister} noValidate>
+          <form onSubmit={handleLogin} noValidate>
               {/* PhoneNumber Fields */}
               <Input
                 id="email"

@@ -1,7 +1,7 @@
 import ProductFilter from "@/components/modules/product/filter/ProductFilter";
 import ProductCard from "@/components/modules/product/ProductCard";
 import { filtersMock, products } from "@/data/mock";
-import { FilterState } from "@/types/type";
+import { FilterState } from "@/types/utils";
 import { useState } from "react";
 
 const WishList = () => {

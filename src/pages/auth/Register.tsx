@@ -1,5 +1,5 @@
 import { useState, FormEvent, ChangeEvent } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Input from '../../components/form/Input';
 import CheckBox from '@/components/form/CheckBox';
 import Button from '@/components/form/Button';
@@ -8,6 +8,8 @@ import { ErrorType } from '@/types/utils';
 import { RegisterFormData } from '@/types/dto';
 import { EGender } from '@/types/model';
 import { validateRegisterForm } from '@/utils/validate/Validate';
+import { useAuthContext } from '@/context/AuthContext';
+
 
 const Register = () => {
   const [formData, setFormData] = useState<RegisterFormData>({
@@ -22,6 +24,8 @@ const Register = () => {
   });
   const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState<ErrorType<RegisterFormData>>({});
+  const {register} = useAuthContext();
+  const navigate = useNavigate();
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { id, value } = e.target;
@@ -35,12 +39,15 @@ const Register = () => {
     setFormData((prev) => ({ ...prev, gender: value }));
   };
   
-  const handleRegister = (e: FormEvent<HTMLFormElement>) => {
+  const handleRegister = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    
-    setErrors(validateRegisterForm(formData));
-    if (Object(errors).length === 0) {
-      console.log('Form submitted:', formData);
+
+    const validationErrors = validateRegisterForm(formData);
+    setErrors(validationErrors);
+
+    if (Object.keys(validationErrors).length === 0) {
+      await register(formData)
+      navigate('/login', { replace: true });
     }
   };
 
@@ -108,6 +115,7 @@ const Register = () => {
                   onChange={handleChange}
                   required
                   error={errors.birthday}
+                  max={new Date().toISOString().split('T')[0]}
                 />
                 <div>
                   <label className="block mb-1 text-sm font-medium text-gray-700">

@@ -1,4 +1,4 @@
-import { ColorType } from "@/types/interface";
+import { ColorType } from "@/types/model";
 
 type ColorComponentSize = Record<'md' | 'xl', string>;
 
