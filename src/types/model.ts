@@ -106,6 +106,19 @@ export interface User {
   birthday: string;
 }
 
+export interface UserDetailType {
+  id: string;
+  email: string;
+  phoneNumber: string;
+  firstName: string;
+  lastName: string;
+  gender: EGender;
+  birthday: string; 
+  createdAt: string; 
+  lastLogin?: string | null;
+  locked: boolean;
+  enabled: boolean;
+}
 export enum EGender {
   MALE = "MALE",
   FEMALE = "FEMALE",

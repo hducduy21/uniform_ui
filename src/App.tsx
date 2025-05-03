@@ -18,6 +18,8 @@ import ProductCreation from "./pages/admin/ProductCreation"
 import CategoryManagement from "./pages/admin/CategoryManagement"
 import { InventoryManagement } from "./pages/admin/InventoryManagement"
 import SizeGroupManagement from "./pages/admin/SizeGroupManagement"
+import ProductDetailManagement from "./pages/admin/ProductDetailManagement"
+import CustomerManagement from "./pages/admin/CustomerManagement"
 
 function App() {
   return (
@@ -27,10 +29,12 @@ function App() {
         <Route path="admin" element={<AdminLayout />}>
               <Route index path="dashboard" element={<></> } />
               <Route path="products/creation" element={<ProductCreation />} />
+              <Route path="products/:id" element={<ProductDetailManagement />} />
               <Route path="products" element={<ProductManagement />} />
               <Route path="categories" element={<CategoryManagement />} />
               <Route path="inventory" element={<InventoryManagement />} />
               <Route path="size" element={<SizeGroupManagement />} />
+              <Route path="customers" element={<CustomerManagement />} />
         </Route>
 
         {/* User Routes */}
