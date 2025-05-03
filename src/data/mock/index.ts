@@ -1,6 +1,6 @@
 import images from "@/assets";
 import { FilterType } from "@/types/utils";
-import { CartType, CategoryType, ColorType, ProductGeneralAdminType, ProductGeneralType, ProductStatus, ProductType, ProductVariantType, SizesType } from "@/types/model";
+import { CartType, CategoryDetailType, CategoryStatus, CategoryType, ColorType, ProductGeneralAdminType, ProductGeneralType, ProductStatus, ProductType, ProductVariantType, SizesType } from "@/types/model";
 
 export const sizeOptions: SizesType[] = [
     {
@@ -54,6 +54,92 @@ export const rootCategories: CategoryType[] = [
         ]
     }
 ];
+
+export const mockCategories: CategoryDetailType[] = [
+    {
+      id: 'cat-001',
+      name: 'Electronics',
+      description: 'All kinds of electronic products',
+      status: CategoryStatus.ACTIVE,
+      parentId: 'root',
+      createdAt: '2025-05-01T10:00:00Z',
+      updatedAt: '2025-05-02T12:00:00Z',
+      createdBy: 'admin',
+      lastUpdateBy: 'editor',
+    },
+    {
+      id: 'cat-002',
+      name: 'Smartphones',
+      description: 'Latest smartphones from various brands',
+      status: CategoryStatus.FOCUS,
+      parentId: 'cat-001',
+      createdAt: '2025-05-01T11:00:00Z',
+      updatedAt: '2025-05-02T13:00:00Z',
+      createdBy: 'editor',
+      lastUpdateBy: 'editor',
+    },
+    {
+      id: 'cat-003',
+      name: 'Home Appliances',
+      description: 'Appliances for daily home use',
+      status: CategoryStatus.MAIN,
+      parentId: 'root',
+      createdAt: '2025-05-01T12:00:00Z',
+      updatedAt: '2025-05-02T14:00:00Z',
+      createdBy: 'admin',
+      lastUpdateBy: 'admin',
+    },
+    {
+      id: 'cat-004',
+      name: 'Gaming',
+      description: 'Consoles, games and accessories',
+      status: CategoryStatus.UPCOMING,
+      parentId: 'cat-001',
+      createdAt: '2025-05-01T13:00:00Z',
+      updatedAt: '2025-05-02T15:00:00Z',
+      createdBy: 'admin',
+      lastUpdateBy: 'editor',
+    },
+    {
+      id: 'cat-005',
+      name: 'Clearance',
+      description: 'Discounted and end-of-line items',
+      status: CategoryStatus.INACTIVE,
+      parentId: 'root',
+      createdAt: '2025-05-01T14:00:00Z',
+      updatedAt: '2025-05-02T16:00:00Z',
+      createdBy: 'system',
+      lastUpdateBy: 'system',
+    },
+  ];
+
+export const mockSizeGroups: SizesType[] = [
+    {
+      id: 1,
+      sizeTitle: "Adult Standard",
+      elements: ["XS", "S", "M", "L", "XL", "XXL"],
+    },
+    {
+      id: 2,
+      sizeTitle: "Kids",
+      elements: ["3Y", "4Y", "5Y", "6Y", "7Y", "8Y", "9Y", "10Y"],
+    },
+    {
+      id: 3,
+      sizeTitle: "Shoes EU",
+      elements: ["36", "37", "38", "39", "40", "41", "42", "43", "44", "45"],
+    },
+    {
+      id: 4,
+      sizeTitle: "Shoes US",
+      elements: ["5", "5.5", "6", "6.5", "7", "7.5", "8", "8.5", "9", "9.5", "10"],
+    },
+    {
+      id: 5,
+      sizeTitle: "One Size",
+      elements: ["OS"],
+    },
+  ]
 
 export const productDetailsMock: ProductType = {
     id: "prod-001",
