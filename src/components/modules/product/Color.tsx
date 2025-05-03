@@ -8,12 +8,13 @@ const ColorSize: ColorComponentSize = {
 };
 
 type ColorComponentProps = {
-    item: ColorType
+    item?: ColorType
     size?: keyof ColorComponentSize
+    color?: string
 }
 
-export default function Color({ size='md', item }:  ColorComponentProps) {
+export default function Color({ size='md', item, color }:  ColorComponentProps) {
   return (
-    <div className={`${ColorSize[size]} rounded-full border border-gray-300`} style={{backgroundColor: item.hexCode}} />
+    <div className={`${ColorSize[size]} rounded-full border border-gray-300`} style={{backgroundColor: color || item?.hexCode}} />
   );
 }

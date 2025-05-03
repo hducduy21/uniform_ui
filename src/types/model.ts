@@ -40,6 +40,14 @@ export enum ProductStatus {
   FEATURED= "FEATURED",
 }
 
+export enum CategoryStatus{
+  MAIN= "MAIN",
+  ACTIVE= "ACTIVE",
+  INACTIVE= "INACTIVE",
+  UPCOMING= "UPCOMING",
+  FOCUS= "FOCUS",
+}
+
 export interface ProductVariantType {
   id: string
   product: Partial<ProductType>
@@ -68,6 +76,17 @@ export interface SizesType{
   elements: string[]
 }
 
+export interface CategoryDetailType {
+  id: string
+  name: string
+  description: string
+  status: CategoryStatus
+  parentId: string
+  createdAt: string
+  updatedAt: string
+  createdBy: string
+  lastUpdateBy: string
+}
 export interface CategoryType {
     id: string
     name: string
