@@ -14,6 +14,7 @@ import { AuthProvider } from "./context/AuthContext"
 import PrivateRoute from "./layouts/PrivateRoute"
 import AdminLayout from "./layouts/AdminLayout"
 import ProductManagement from "./pages/admin/ProductsManagement"
+import ProductCreation from "./pages/admin/ProductCreation"
 
 function App() {
   return (
@@ -21,7 +22,8 @@ function App() {
       <Routes>
         {/* Admin Routes */}
         <Route path="admin" element={<AdminLayout />}>
-              {/* <Route index element={<></> } /> */}
+              <Route index path="dashboard" element={<></> } />
+              <Route path="products/creation" element={<ProductCreation />} />
               <Route path="products" element={<ProductManagement />} />
         </Route>
 

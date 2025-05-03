@@ -43,8 +43,8 @@ export enum ProductStatus {
 export interface ProductVariantType {
   id: string
   product: Partial<ProductType>
-  size: String
-  color: String
+  size: string
+  color: string
   imageUrl: string
   costPrice: number
   quantityInStock: number
