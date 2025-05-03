@@ -24,7 +24,7 @@ const ProductCard = ({ product }: { product: ProductGeneralType }) => {
 
         {/* Product colors */}
         <div className='flex flex-wrap gap-1 mt-2'>
-          {product.colors.map((color, idx) => (
+          {product.colors.map((color) => (
             <Color item={color} />
           ))}
         </div>

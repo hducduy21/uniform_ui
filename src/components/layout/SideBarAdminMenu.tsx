@@ -1,65 +1,87 @@
-import type React from "react"
-import { Menu } from "antd"
-import { useNavigate, useLocation } from "react-router-dom"
-import { DashboardOutlined, ShoppingOutlined, AppstoreOutlined, UserOutlined, InboxOutlined } from "@ant-design/icons"
-import { use, useEffect } from "react"
+import { Button, Menu } from 'antd';
+import { useNavigate, useLocation, Link } from 'react-router-dom';
+import {
+  DashboardOutlined,
+  ShoppingOutlined,
+  AppstoreOutlined,
+  UserOutlined,
+  InboxOutlined,
+} from '@ant-design/icons';
+import { JSX, useEffect } from 'react';
 
 const menuItems = [
   {
-    key: "/admin",
+    key: '/admin/dashboard',
     icon: <DashboardOutlined />,
-    label: "Dashboard",
-    headerLabel: "Dashboard",
+    label: 'Dashboard',
+    headerLabel: 'Dashboard',
   },
   {
-    key: "/admin/products",
+    key: '/admin/products',
     icon: <ShoppingOutlined />,
-    label: "Products",
-    headerLabel: "Products Management",
+    label: 'Products',
+    headerItem: (
+      <Link to={'/admin/products/creation'}>
+        <Button type='primary'>Create Product</Button>
+      </Link>
+    ),
+    headerLabel: 'Products Management',
   },
   {
-    key: "/admin/categories",
+    key: '/admin/categories',
     icon: <AppstoreOutlined />,
-    label: "Categories",
-    headerLabel: "Categories Management",
+    label: 'Categories',
+    headerLabel: 'Categories Management',
   },
   {
-    key: "/admin/customers",
+    key: '/admin/customers',
     icon: <UserOutlined />,
-    label: "Customers",
-    headerLabel: "Customers Management",
+    label: 'Customers',
+    headerLabel: 'Customers Management',
   },
   {
-    key: "/admin/inventory",
+    key: '/admin/inventory',
     icon: <InboxOutlined />,
-    label: "Inventory",
-    headerLabel: "Inventory Management",
+    label: 'Inventory',
+    headerLabel: 'Inventory Management',
   },
-]
+];
 
-const SideBarAdminMenu= ({setHeaderLabel} : {setHeaderLabel?: (headerLabel : string)=> void}) => {
-  const navigate = useNavigate()
-  const location = useLocation()
+const SideBarAdminMenu = ({
+  setHeaderLabel,
+  setHeaderItem,
+}: {
+  setHeaderLabel?: (headerLabel: string) => void;
+  setHeaderItem?: (headerItem: JSX.Element | null) => void;
+}) => {
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const handleMenuClick = (e: { key: string }) => {
-    navigate(e.key)
-  }
+    navigate(e.key);
+  };
 
   useEffect(() => {
-    const headerLabel = menuItems.find((item) => item.key === location.pathname)?.headerLabel || "Dashboard"
-    setHeaderLabel?.(headerLabel)
-  }, [location])
+    const item = menuItems.find((item) => item.key === location.pathname);
+    setHeaderLabel?.(item?.headerLabel || '');
+    setHeaderItem?.(item?.headerItem || null);
+  }, [location]);
+
+  const selectedKey =
+    menuItems.find(
+      (item) => location.pathname === item.key || location.pathname.startsWith(item.key)
+    )?.key || location.pathname;
 
   return (
     <Menu
-      theme="light"
-      mode="inline"
-      selectedKeys={[location.pathname]}
+      theme='light'
+      mode='inline'
+      selectedKeys={[selectedKey]}
       onClick={handleMenuClick}
       items={menuItems}
       style={{ borderRight: 0 }}
     />
-  )
-}
+  );
+};
 
-export default SideBarAdminMenu
+export default SideBarAdminMenu;

@@ -1,4 +1,4 @@
-import type React from 'react';
+import React from 'react';
 import { useState } from 'react';
 import { Layout, theme, Button } from 'antd';
 import { Outlet } from 'react-router-dom';
@@ -9,10 +9,14 @@ import { LogOut } from 'lucide-react';
 
 const { Header, Sider, Content } = Layout;
 
+type HeaderItem = {
+  label: string;
+  button: React.ReactNode;
+};
+
 const AdminLayout: React.FC = () => {
   const [collapsed, setCollapsed] = useState(false);
-  const [headerLabel, setHeaderLabel] = useState('Dashboard');
-
+  const [headerItem, setHeaderItem] = useState<HeaderItem>({ label: '', button: null });
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
@@ -37,7 +41,14 @@ const AdminLayout: React.FC = () => {
         >
           <img src={images.logo} className='object-cover px-2 py-1' />
         </div>
-        <SideBarAdminMenu setHeaderLabel={setHeaderLabel} />
+        <SideBarAdminMenu
+          setHeaderItem={(item: React.ReactNode) =>
+            setHeaderItem((prev) => ({ ...prev, button: item }))
+          }
+          setHeaderLabel={(label: string) =>
+            setHeaderItem((prev) => ({ ...prev, label: label }))
+          }
+        />
       </Sider>
 
       <Layout className='overflow-y-auto'>
@@ -51,11 +62,14 @@ const AdminLayout: React.FC = () => {
           >
             {collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
           </div>
-          
+
           <div className='flex items-center justify-between w-full px-4'>
-            <h1 className='text-lg font-semibold'>{headerLabel}</h1>
-            <div className='flex items-center justify-center w-16 h-16 p-2 text-base rounded cursor-pointer hover:bg-gray-100'>
-              <LogOut />
+            <h1 className='text-lg font-semibold'>{headerItem.label}</h1>
+            <div className='flex items-center gap-4'>
+              {headerItem.button}
+              <div className='flex items-center justify-center w-16 h-16 p-2 text-base rounded cursor-pointer hover:bg-gray-100'>
+                <LogOut />
+              </div>
             </div>
           </div>
         </Header>

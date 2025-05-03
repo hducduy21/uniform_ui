@@ -1,6 +1,6 @@
 import images from "@/assets";
 import { FilterType } from "@/types/utils";
-import { CartType, CategoryType, ProductGeneralAdminType, ProductGeneralType, ProductStatus, ProductType, SizesType } from "@/types/model";
+import { CartType, CategoryType, ColorType, ProductGeneralAdminType, ProductGeneralType, ProductStatus, ProductType, ProductVariantType, SizesType } from "@/types/model";
 
 export const sizeOptions: SizesType[] = [
     {
@@ -54,6 +54,105 @@ export const rootCategories: CategoryType[] = [
         ]
     }
 ];
+
+export const productDetailsMock: ProductType = {
+    id: "prod-001",
+    code: "SKU-12345",
+    name: "Classic Cotton T-Shirt",
+    price: 199000,
+    category: {
+      id: "cat-01",
+      name: "Clothing",
+      children: [
+        {
+          id: "cat-01-01",
+          name: "T-Shirts"
+        }
+      ]
+    },
+    description: "A classic 100% cotton t-shirt. Soft, comfortable, and durable for daily wear.",
+    status: ProductStatus.ACTIVE,
+    sizes: {
+      id: 1,
+      sizeTitle: "Standard Sizes",
+      elements: ["S", "M", "L", "XL"]
+    },
+    rating: 4.5,
+    totalRates: 200,
+    colors: [
+      {
+        id: 1,
+        name: "Black",
+        hexCode: "#000000"
+      },
+      {
+        id: 2,
+        name: "White",
+        hexCode: "#FFFFFF"
+      }
+    ],
+    views: 1500,
+    imageUrl: images.product1,
+    ratingCount: 150,
+    createdAt: "2025-05-01T10:00:00Z",
+    updatedAt: "2025-05-02T08:30:00Z",
+    createdBy: "admin01",
+    lastUpdateBy: "admin02",
+    productVariants: [
+      {
+        id: "variant-001",
+        product: {
+          id: "prod-001",
+          name: "Classic Cotton T-Shirt"
+        },
+        size: "M",
+        color: "Black",
+        imageUrl: images.product2,
+        costPrice: 120000,
+        quantityInStock: 50
+      },
+      {
+        id: "variant-002",
+        product: {
+          id: "prod-001",
+          name: "Classic Cotton T-Shirt"
+        },
+        size: "L",
+        color: "White",
+        imageUrl: images.product3,
+        costPrice: 120000,
+        quantityInStock: 35
+      }
+    ]
+  };
+
+export const productVariantMock : ProductVariantType[] = [
+    {
+      id: "variant-001",
+      product: {
+        id: "prod-001",
+        name: "Classic Cotton T-Shirt"
+      },
+      size: "M",
+      color: "Black",
+      imageUrl: images.product2,
+      costPrice: 120000,
+      quantityInStock: 50
+    },
+    {
+      id: "variant-002",
+      product: {
+        id: "prod-001",
+        name: "Classic Cotton T-Shirt"
+      },
+      size: "L",
+      color: "White",
+      imageUrl: images.product3,
+      costPrice: 120000,
+      quantityInStock: 35
+    }
+  ]
+
 
 export const products: ProductGeneralType [] = [
     {
@@ -215,6 +314,11 @@ export  const filtersMock : FilterType = {
       { id: "500plus", label: "$500+", range: [500, 10000] as [number, number] },
     ],
   }
+export const colorOptions: ColorType[] = [
+    { id: 1, name: "Black", hexCode: "#000000" },
+    { id: 2, name: "Olive", hexCode: "#808000" },
+    { id: 3, name: "Beige", hexCode: "#f5f5dc" }
+]
 
 export const carts : CartType[] = [
     {
