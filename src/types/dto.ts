@@ -1,4 +1,4 @@
-import { EGender, User } from "./model";
+import { CategoryDetailType, EGender, User } from "./model";
 
 export interface LoginCredentials {
     email: string
@@ -25,3 +25,5 @@ export interface AuthResponse {
   tokens: Token
   user: UserAuth
 }
+
+export type CategoryRequest = Pick<CategoryDetailType, 'name' | 'description' | 'status'> & {parent: number}

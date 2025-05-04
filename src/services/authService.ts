@@ -1,8 +1,7 @@
-import api from "@/configs/axios";
+import {api, authApi} from "@/configs/axios";
 import { AuthResponse, LoginCredentials, RegisterFormData, UserAuth } from "@/types/dto";
 import { getAccessToken } from "@/utils/cookieUtil";
 import axios from "axios";
-import { redirect } from "react-router-dom";
 
 
 export const login = async (credentials: LoginCredentials): Promise<AuthResponse> => {
@@ -41,12 +40,11 @@ export const refreshAccessToken = async (): Promise<string> => {
   }
 
   try {
-    const response = await api.post<{ accessToken: string }>("/auth/refresh", { refreshToken });
+    const response = await api.post("/auth/refresh",{}, { headers: { Authorization: `Bearer ${refreshToken}` } });
     const expires = new Date(Date.now() + 60 * 60 * 1000).toUTCString();
     document.cookie = `accessToken=${response.data.accessToken}; path=/; expires=${expires}; secure; samesite=strict`;
     return response.data.accessToken;
   } catch (error) {
-    console.error("Token refresh error:", error);
     throw new Error("Failed to refresh token.");
   }
 };
@@ -55,7 +53,7 @@ export const logout = async (): Promise<void> => {
   try {
     const refreshToken = localStorage.getItem("refreshToken");
     if (refreshToken) {
-      await api.post("/auth/logout", { refreshToken });
+      await authApi.post("/auth/logout", { refreshToken });
     }
   } catch (error) {
     console.error("Logout error:", error);
@@ -66,20 +64,11 @@ export const logout = async (): Promise<void> => {
   }
 };
 
-export const isAuthenticated = (): boolean => {
-  const cookies = document.cookie.split(";").reduce((acc, cookie) => {
-    const [name, value] = cookie.trim().split("=");
-    acc[name] = value;
-    return acc;
-  }, {} as Record<string, string>);
-  return !!cookies["accessToken"];
-};
-
 export const getCurrentUser = async (): Promise<UserAuth> => {
   try {
-    const response = await api.get<UserAuth>("/auth/me");
+    const response = await authApi.get<UserAuth>("/auth/me");
     return response.data;
   } catch (error) {
-    throw new Error("Failed to fetch user.");
+    return Promise.reject("Failed to fetch user data.");
   }
 };

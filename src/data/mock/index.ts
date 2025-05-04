@@ -97,7 +97,7 @@ export const mockCategories: CategoryDetailType[] = [
     id: 'cat-003',
     name: 'Home Appliances',
     description: 'Appliances for daily home use',
-    status: CategoryStatus.MAIN,
+    status: CategoryStatus.ACTIVE,
     parentId: 'root',
     createdAt: '2025-05-01T12:00:00Z',
     updatedAt: '2025-05-02T14:00:00Z',

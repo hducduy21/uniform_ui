@@ -41,7 +41,6 @@ export enum ProductStatus {
 }
 
 export enum CategoryStatus{
-  MAIN= "MAIN",
   ACTIVE= "ACTIVE",
   INACTIVE= "INACTIVE",
   UPCOMING= "UPCOMING",
@@ -77,23 +76,20 @@ export interface SizesType{
 }
 
 export interface CategoryDetailType {
-  id: string
+  id: number
   name: string
   description: string
   status: CategoryStatus
-  parentId: string
-  createdAt: string
-  updatedAt: string
-  createdBy: string
-  lastUpdateBy: string
+  parent: CategoryGeneralType
+  createdAt?: string
+  updatedAt?: string
+  createdBy?: string
+  updateBy?: string
 }
-export interface CategoryType {
-    id: string
-    name: string
-    children?: {
-        id: string
-        name: string
-    }[]
+
+export type CategoryGeneralType = Pick<CategoryDetailType, 'id' | 'name'>
+export type CategoryType = Pick<CategoryDetailType, 'id' | 'name'> & {
+  children?: Pick<CategoryDetailType, 'id' | 'name'>[]
 }
 
 export interface User {
@@ -104,6 +100,7 @@ export interface User {
   lastName: string;
   gender: EGender;
   birthday: string;
+  role?: string;
 }
 
 export interface UserDetailType {

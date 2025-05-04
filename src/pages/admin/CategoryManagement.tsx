@@ -1,137 +1,162 @@
-import { useState } from "react"
-import { Table, Button, Space, Modal, Form, Input, Select, Card, Tag, Popconfirm } from "antd"
-import { PlusOutlined, EditOutlined, DeleteOutlined } from "@ant-design/icons"
-import { CategoryDetailType, CategoryStatus } from "@/types/model"
-import { mockCategories } from "@/data/mock"
+import { useState } from 'react';
+import { Table, Button, Space, Modal, Form, Input, Select, Card, Tag } from 'antd';
+import { PlusOutlined, EditOutlined } from '@ant-design/icons';
+import { CategoryDetailType, CategoryStatus } from '@/types/model';
+import { useManageCategory } from '@/hooks/useManageCategory';
+import { CategoryRequest } from '@/types/dto';
 
-const { Option } = Select
-const { TextArea } = Input
+const { Option } = Select;
+const { TextArea } = Input;
 
 const CategoryManagement = () => {
-  const [categories, setCategories] = useState<CategoryDetailType[]>(mockCategories)
-  const [loading, setLoading] = useState(false)
-  const [isModalVisible, setIsModalVisible] = useState(false)
-  const [editingCategory, setEditingCategory] = useState<CategoryDetailType | null>(null)
-  const [form] = Form.useForm()
-  
+  const { categories, createCategory, updatedCategory, isLoading } = useManageCategory();
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [editingCategory, setEditingCategory] = useState<CategoryDetailType | null>(null);
+  const [form] = Form.useForm<CategoryRequest>();
+
+  const handleCreate = async () => {
+    await createCategory(form.getFieldsValue());
+    setIsModalVisible(false);
+  };
+
+  const handleUpdate = async () => {
+    if (editingCategory) {
+      await updatedCategory(editingCategory?.id || 0, form.getFieldsValue());
+    }
+    setIsModalVisible(false);
+  };
 
   const showCreateModal = () => {
-    setEditingCategory(null)
-    form.resetFields()
-    setIsModalVisible(true)
-  }
+    setEditingCategory(null);
+    form.resetFields();
+    setIsModalVisible(true);
+  };
 
   const showEditModal = (category: CategoryDetailType) => {
-    setEditingCategory(category)
+    setEditingCategory(category);
     form.setFieldsValue({
       name: category.name,
-      description: category,
-      parentId: category.parentId,
+      description: category.description,
+      parent: category.parent?.id,
       status: category.status,
-    })
-    setIsModalVisible(true)
-  }
+    });
+    setIsModalVisible(true);
+  };
 
   const handleCancel = () => {
-    setIsModalVisible(false)
-    form.resetFields()
-  }
-
+    setIsModalVisible(false);
+    form.resetFields();
+  };
 
   const columns = [
     {
-      title: "Name",
-      dataIndex: "name",
-      key: "name",
-      render: (_: any, record: CategoryDetailType) => (
-        <span>
-          {record.name}
-        </span>
-      ),
+      title: 'Name',
+      dataIndex: 'name',
+      key: 'name',
+      render: (_: any, record: CategoryDetailType) => <span>{record.name}</span>,
     },
     {
-      title: "Description",
-      dataIndex: "description",
-      key: "description",
-      ellipsis: true,
+      title: 'Parent Category',
+      key: 'parentId',
+      width: '150px',
+      render: (_: any, record: CategoryDetailType) => record.parent?.name || 'N/A',
     },
     {
-      title: "Parent Category",
-      key: "parentId",
-      render: (_: any, record: CategoryDetailType) => record.parentId,
-    },
-    {
-      title: "Status",
-      dataIndex: "status",
-      key: "status",
+      title: 'Status',
+      dataIndex: 'status',
+      key: 'status',
       render: (status: string) => <Tag>{status}</Tag>,
     },
     {
-      title: "Actions",
-      key: "actions",
+      title: 'Created At',
+      dataIndex: 'createdAt',
+      key: 'createdAt',
+      width: '100px',
+      render: (createdAt: string) => new Date(createdAt).toLocaleDateString(),
+    },
+    {
+      title: 'Created By',
+      dataIndex: 'createdBy',
+      key: 'createdBy',
+    },
+    {
+      title: 'Updated At',
+      dataIndex: 'updatedAt',
+      key: 'updatedAt',
+      width: '100px',
+      render: (updatedAt: string) => updatedAt ? new Date(updatedAt).toLocaleDateString() : 'N/A',
+    },
+    {
+      title: 'Updated By',
+      dataIndex: 'updatedBy',
+      key: 'updatedBy',
+			render: (updateBy: string) => updateBy? updateBy : 'N/A',
+    },
+    {
+      title: 'Actions',
+      key: 'actions',
       render: (_: any, record: CategoryDetailType) => (
-        <Space size="small">
-          <Button icon={<EditOutlined />} size="small" onClick={() => showEditModal(record)} />
-          <Popconfirm
-            title="Are you sure you want to delete this category?"
-            onConfirm={() => {}}
-            okText="Yes"
-            cancelText="No"
-          >
-            <Button icon={<DeleteOutlined />} size="small" danger />
-          </Popconfirm>
+        <Space size='small'>
+          <Button icon={<EditOutlined />} size='small' onClick={() => showEditModal(record)} />
         </Space>
       ),
     },
-  ]
+  ];
 
   return (
     <div>
-      <Card className="mb-5">
-        <div className="flex items-center justify-end mb-5">
-          <Button type="primary" icon={<PlusOutlined />} onClick={showCreateModal}>
+      <Card className='mb-5'>
+        <div className='flex items-center justify-end mb-5'>
+          <Button type='primary' icon={<PlusOutlined />} onClick={showCreateModal}>
             Add Category
           </Button>
         </div>
 
-        <Table dataSource={categories} columns={columns} rowKey="id" loading={loading} pagination={{ pageSize: 10 }} />
+        <Table
+          dataSource={categories || []}
+          columns={columns}
+          rowKey='id'
+          loading={isLoading}
+          pagination={false}
+        />
       </Card>
 
-			{/* Modal for creating/editing categories */}
+      {/* Modal for creating/editing categories */}
       <Modal
-        title={editingCategory ? "Edit Category" : "Add Category"}
+        title={editingCategory ? 'Edit Category' : 'Add Category'}
         open={isModalVisible}
+        onOk={editingCategory ? handleUpdate : handleCreate}
         onCancel={handleCancel}
-        okText={editingCategory ? "Update" : "Create"}
+        okText={editingCategory ? 'Update' : 'Create'}
       >
-        <Form form={form} layout="vertical">
+        <Form form={form} layout='vertical'>
           <Form.Item
-            name="name"
-            label="Category Name"
-            rules={[{ required: true, message: "Please enter category name" }]}
+            name='name'
+            label='Category Name'
+            rules={[{ required: true, message: 'Please enter category name' }]}
           >
-            <Input placeholder="Enter category name" />
+            <Input placeholder='Enter category name' />
           </Form.Item>
 
-          <Form.Item name="description" label="Description">
-            <TextArea rows={3} placeholder="Enter category description" />
+          <Form.Item name='description' label='Description'>
+            <TextArea rows={3} placeholder='Enter category description' />
           </Form.Item>
 
-          <Form.Item name="parentId" label="Parent Category">
-            <Select placeholder="Select parent category" allowClear showSearch optionFilterProp="children">
-                {categories.map((category) => (
-                    <Option key={category.id} value={category.id}>
-                    {category.name}
-                    </Option>
-                ))}
+          <Form.Item name='parent' label='Parent Category'>
+            <Select placeholder='Select parent category' allowClear showSearch>
+              {categories?.map((category: CategoryDetailType) => (
+                <Option key={category.id} value={category.id}>
+                  {category.name}
+                </Option>
+              ))}
             </Select>
           </Form.Item>
 
           <Form.Item
-            name="status"
-            label="Status"
-            initialValue="active"
-            rules={[{ required: true, message: "Please select status" }]}
+            name='status'
+            label='Status'
+            initialValue='ACTIVE'
+            rules={[{ required: true, message: 'Please select status' }]}
           >
             <Select>
               {Object.values(CategoryStatus).map((status) => (
@@ -144,7 +169,7 @@ const CategoryManagement = () => {
         </Form>
       </Modal>
     </div>
-  )
-}
+  );
+};
 
-export default CategoryManagement
+export default CategoryManagement;

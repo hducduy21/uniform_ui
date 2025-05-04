@@ -1,4 +1,4 @@
-import { useState, FormEvent, ChangeEvent } from 'react';
+import { useState, FormEvent, ChangeEvent, use, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import Input from '../../components/form/Input';
 import CheckBox from '@/components/form/CheckBox';
@@ -20,7 +20,15 @@ const Login = () => {
   const location = useLocation();
   const from = location.state?.from || '/';
 
-  const {login} = useAuthContext();
+  const {login, user} = useAuthContext();
+
+  useEffect(() => {
+    if(user && user?.role === "ADMIN"){
+      navigate('/admin', { replace: true });
+    }else if(user){
+      navigate(from, { replace: true });
+    }
+  },[user])
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { id, value } = e.target;
@@ -38,7 +46,6 @@ const Login = () => {
 
     if (Object.keys(validationErrors).length === 0) {
       await login(formData)
-      navigate(from, { replace: true });
     }
   };
 
