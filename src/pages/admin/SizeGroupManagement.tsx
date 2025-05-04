@@ -1,62 +1,77 @@
-import { useState } from "react"
-import { Table, Button, Space, Modal, Form, Input, Typography, Card, Tag, Popconfirm} from "antd"
-import { PlusOutlined, EditOutlined, DeleteOutlined, PlusCircleOutlined, MinusCircleOutlined } from "@ant-design/icons"
-import type { SizesType } from "@/types/model"
-import { mockSizeGroups } from "@/data/mock"
-
-const { Title } = Typography
+import { useState } from 'react';
+import { Table, Button, Space, Modal, Form, Input, Typography, Card, Tag } from 'antd';
+import {
+  PlusOutlined,
+  EditOutlined,
+  PlusCircleOutlined,
+  MinusCircleOutlined,
+} from '@ant-design/icons';
+import type { SizesType } from '@/types/model';
+import { useSize } from '@/hooks/useSize';
+import { SizeRequest } from '@/types/dto';
 
 const SizeGroupManagement = () => {
-  const [sizeGroups, setSizeGroups] = useState<SizesType[]>(mockSizeGroups)
-  const [loading, setLoading] = useState(false)
-  const [isModalVisible, setIsModalVisible] = useState(false)
-  const [editingSizeGroup, setEditingSizeGroup] = useState<SizesType | null>(null)
-  const [form] = Form.useForm()
+  const { sizes, createSize, updatedSize, isLoading } = useSize();
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [editingSizeGroup, setEditingSizeGroup] = useState<SizesType | null>(null);
+  const [form] = Form.useForm<SizeRequest>();
 
   const showCreateModal = () => {
-    setEditingSizeGroup(null)
-    form.resetFields()
+    setEditingSizeGroup(null);
+    form.resetFields();
     form.setFieldsValue({
-      elements: [""],
-    })
-    setIsModalVisible(true)
-  }
+      elements: [''],
+    });
+    setIsModalVisible(true);
+  };
 
   const showEditModal = (sizeGroup: SizesType) => {
-    setEditingSizeGroup(sizeGroup)
+    setEditingSizeGroup(sizeGroup);
     form.setFieldsValue({
-      name: sizeGroup.sizeTitle,
+      name: sizeGroup.name,
       elements: sizeGroup.elements,
-    })
-    setIsModalVisible(true)
-  }
+    });
+    setIsModalVisible(true);
+  };
 
   const handleCancel = () => {
-    setIsModalVisible(false)
-    form.resetFields()
-  }
+    setIsModalVisible(false);
+    form.resetFields();
+  };
+
+  const handleCreate = async () => {
+    await createSize(form.getFieldsValue());
+    setIsModalVisible(false);
+  };
+
+  const handleUpdate = async () => {
+    if (editingSizeGroup && editingSizeGroup.id > 0) {
+      await updatedSize(editingSizeGroup.id, form.getFieldsValue());
+    }
+    setIsModalVisible(false);
+  };
 
   const columns = [
     {
-      title: "ID",
-      dataIndex: "id",
-      key: "id",
-      width: "10%",
+      title: 'ID',
+      dataIndex: 'id',
+      key: 'id',
+      width: '10%',
     },
     {
-      title: "Name",
-      dataIndex: "sizeTitle",
-      key: "sizeTitle",
-      width: "20%",
+      title: 'Name',
+      dataIndex: 'name',
+      key: 'name',
+      width: '20%',
     },
     {
-      title: "Elements",
-      dataIndex: "elements",
-      key: "elements",
+      title: 'Elements',
+      dataIndex: 'elements',
+      key: 'elements',
       render: (elements: string[]) => (
-        <div className="flex flex-wrap gap-2">
+        <div className='flex flex-wrap gap-2'>
           {elements.map((element, index) => (
-            <Tag key={index} color="blue">
+            <Tag key={index} color='blue'>
               {element}
             </Tag>
           ))}
@@ -64,67 +79,63 @@ const SizeGroupManagement = () => {
       ),
     },
     {
-      title: "Actions",
-      key: "actions",
-      width: "15%",
+      title: 'Actions',
+      key: 'actions',
+      width: '15%',
       render: (_: any, record: SizesType) => (
-        <Space size="small">
-          <Button icon={<EditOutlined />} size="small" onClick={() => showEditModal(record)} />
-          <Popconfirm
-            title="Are you sure you want to delete this size group?"
-            okText="Yes"
-            cancelText="No"
-            placement="topRight"
-          >
-            <Button icon={<DeleteOutlined />} size="small" danger />
-          </Popconfirm>
+        <Space size='small'>
+          <Button icon={<EditOutlined />} size='small' onClick={() => showEditModal(record)} />
         </Space>
       ),
     },
-  ]
+  ];
 
   return (
     <div>
-      <Title level={2}>Size Group Management</Title>
-
-      <Card className="mb-4">
-        <div className="flex items-center justify-between mb-4"
-        >
+      <Card className='mb-4'>
+        <div className='flex items-center justify-between mb-4'>
           <span>Manage size groups for product variants</span>
-          <Button type="primary" icon={<PlusOutlined />} onClick={showCreateModal}>
+          <Button type='primary' icon={<PlusOutlined />} onClick={showCreateModal}>
             Add Size Group
           </Button>
         </div>
 
-        <Table dataSource={sizeGroups} columns={columns} rowKey="id" loading={loading} pagination={false} />
+        <Table
+          dataSource={sizes || []}
+          columns={columns}
+          rowKey='id'
+          loading={isLoading}
+          pagination={false}
+        />
       </Card>
 
       <Modal
-        title={editingSizeGroup ? "Edit Size Group" : "Add Size Group"}
+        title={editingSizeGroup ? 'Edit Size Group' : 'Add Size Group'}
         open={isModalVisible}
+        onOk={editingSizeGroup ? handleUpdate : handleCreate}
         onCancel={handleCancel}
-        okText={editingSizeGroup ? "Update" : "Create"}
+        okText={editingSizeGroup ? 'Update' : 'Create'}
         width={600}
       >
-        <Form form={form} layout="vertical">
+        <Form form={form} layout='vertical'>
           <Form.Item
-            name="name"
-            label="Size Group Name"
-            rules={[{ required: true, message: "Please enter size group name" }]}
+            name='name'
+            label='Size Group Name'
+            rules={[{ required: true, message: 'Please enter size group name' }]}
           >
-            <Input placeholder="Enter size group name (e.g., Adult Standard, Kids)" />
+            <Input placeholder='Enter size group name (e.g., Adult Standard, Kids)' />
           </Form.Item>
 
           <Typography.Text strong>Size Elements</Typography.Text>
-          <Typography.Paragraph type="secondary" className="mb-4">
+          <Typography.Paragraph type='secondary' className='mb-4'>
             Add all sizes that belong to this group (e.g., S, M, L, XL)
           </Typography.Paragraph>
 
-          <Form.List name="elements">
+          <Form.List name='elements'>
             {(fields, { add, remove }) => (
               <>
                 {fields.map((field, index) => (
-                  <Form.Item key={field.key} className="mb-2">
+                  <Form.Item key={field.key} className='mb-2'>
                     <Space>
                       <Form.Item
                         {...field}
@@ -132,19 +143,27 @@ const SizeGroupManagement = () => {
                         rules={[
                           {
                             required: true,
-                            message: "Please enter size or delete this field",
+                            message: 'Please enter size or delete this field',
                           },
                         ]}
                       >
-                        <Input placeholder="Enter size (e.g., S, M, L)" className="w-[200px]" />
+                        <Input placeholder='Enter size (e.g., S, M, L)' className='w-[200px]' />
                       </Form.Item>
 
                       {fields.length > 1 && (
-                        <Button type="text" icon={<MinusCircleOutlined />} onClick={() => remove(field.name)} />
+                        <Button
+                          type='text'
+                          icon={<MinusCircleOutlined />}
+                          onClick={() => remove(field.name)}
+                        />
                       )}
 
                       {index === fields.length - 1 && (
-                        <Button type="dashed" icon={<PlusCircleOutlined />} onClick={() => add()}></Button>
+                        <Button
+                          type='dashed'
+                          icon={<PlusCircleOutlined />}
+                          onClick={() => add()}
+                        ></Button>
                       )}
                     </Space>
                   </Form.Item>
@@ -152,7 +171,7 @@ const SizeGroupManagement = () => {
 
                 {fields.length === 0 && (
                   <Form.Item>
-                    <Button type="dashed" onClick={() => add()} block icon={<PlusOutlined />}>
+                    <Button type='dashed' onClick={() => add()} block icon={<PlusOutlined />}>
                       Add Size
                     </Button>
                   </Form.Item>
@@ -163,7 +182,7 @@ const SizeGroupManagement = () => {
         </Form>
       </Modal>
     </div>
-  )
-}
+  );
+};
 
-export default SizeGroupManagement
+export default SizeGroupManagement;

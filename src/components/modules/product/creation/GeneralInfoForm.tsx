@@ -102,7 +102,7 @@ const GeneralInfoForm: React.FC = () => {
               <Select mode="multiple" placeholder="Select sizes" style={{ width: "100%" }}>
                 {sizeOptions.map((size) => (
                   <Option key={size.id} value={size.id}>
-                    {size.sizeTitle}
+                    {size.name}
                   </Option>
                 ))}
               </Select>

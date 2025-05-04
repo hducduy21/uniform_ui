@@ -32,7 +32,7 @@ const ProductCard = ({ product }: { product: ProductGeneralType }) => {
         {/* Product details */}
         <div className='mt-2'>
           <div className='mb-1 text-xs text-gray-500'>
-            {product.category.name} <span className='ml-2'>{product.sizes.sizeTitle}</span>
+            {product.category.name} <span className='ml-2'>{product.sizes.name}</span>
           </div>
           <Link to={`/product/${product.id}`} className='block'>
             <h3 className='text-sm font-medium'>{product.name}</h3>

@@ -7,6 +7,7 @@ import {
   UserOutlined,
   InboxOutlined,
 } from '@ant-design/icons';
+import { Ruler } from 'lucide-react';
 import { JSX, useEffect } from 'react';
 
 const menuItems = [
@@ -44,6 +45,12 @@ const menuItems = [
     icon: <InboxOutlined />,
     label: 'Inventory',
     headerLabel: 'Inventory Management',
+  },
+  {
+    key: '/admin/size',
+    icon: <Ruler size={16} />,
+    label: 'Size Groups',
+    headerLabel: 'Size Groups Management',
   },
 ];
 

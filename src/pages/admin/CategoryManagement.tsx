@@ -20,8 +20,8 @@ const CategoryManagement = () => {
   };
 
   const handleUpdate = async () => {
-    if (editingCategory) {
-      await updatedCategory(editingCategory?.id || 0, form.getFieldsValue());
+    if (editingCategory && editingCategory.id>0) {
+      await updatedCategory(editingCategory.id, form.getFieldsValue());
     }
     setIsModalVisible(false);
   };

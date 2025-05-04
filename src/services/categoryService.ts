@@ -17,7 +17,6 @@ const categoryService = {
   },
   updateCategory: async (id: number, request: CategoryRequest) => {
     const response = await authApi.put(`/categories/${id}`, request);
-    console.log('updateCategory response', request);
     return response.data;
   },
 };

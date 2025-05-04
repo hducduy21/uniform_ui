@@ -24,7 +24,7 @@ export function useManageCategory() {
 
   const updatedCategory = async (id: number, request: CategoryRequest) => {
     try {
-      const newCategory = await categoryService.updateCategory(id,request);
+      const updatedCategory = await categoryService.updateCategory(id,request);
       mutate();
       return updatedCategory;
     } catch (error) {

@@ -71,7 +71,7 @@ export interface ColorType{
 
 export interface SizesType{
   id: number
-  sizeTitle: string
+  name: string
   elements: string[]
 }
 

@@ -1,4 +1,4 @@
-import { CategoryDetailType, EGender, User } from "./model";
+import { CategoryDetailType, EGender, SizesType, User } from "./model";
 
 export interface LoginCredentials {
     email: string
@@ -27,3 +27,6 @@ export interface AuthResponse {
 }
 
 export type CategoryRequest = Pick<CategoryDetailType, 'name' | 'description' | 'status'> & {parent: number}
+
+
+export type SizeRequest = Omit<SizesType, 'id'>

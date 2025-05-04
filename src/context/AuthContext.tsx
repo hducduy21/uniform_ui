@@ -1,8 +1,6 @@
 import React, { createContext, useState, useEffect, useCallback, useMemo } from "react";
 import * as authService from "@/services/authService";
 import { AuthResponse, LoginCredentials, RegisterFormData, UserAuth } from "@/types/dto";
-import { redirect, useNavigate } from "react-router-dom";
-
 interface AuthContextType {
   user: UserAuth | null;
   isLoading: boolean;
@@ -37,7 +35,6 @@ export const AuthProvider: React.FC<{
   const [user, setUser] = useState<UserAuth | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const navigate = useNavigate();
 
   const fetchUser = useCallback(async () => {
     try {
