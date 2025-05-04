@@ -1,23 +1,51 @@
+import { useManageProduct } from '@/hooks/useManageProduct';
 import { InboxOutlined } from '@ant-design/icons';
-import { Card, Typography, Upload, UploadProps } from 'antd';
-import { useState } from 'react';
+import { Button, Card, Typography, Upload, UploadProps } from 'antd';
+import { useEffect, useState } from 'react';
 
 const { Dragger } = Upload;
 const { Title, Text } = Typography;
 
-const ImageUploadForm = () => {
+const ImageUploadForm = ({
+  id,
+  uploaded,
+  setUploading,
+  setUploaded,
+}: {
+  id: string | null;
+  uploaded: boolean;
+  setUploading: (uploading: boolean) => void;
+  setUploaded: () => void;
+}) => {
   const [file, setFile] = useState<File | null>(null);
+  const { uploadProductImage, isLoading } = useManageProduct();
 
-	const props: UploadProps = {
+  const handleUpload = async () => {
+    if (!file || !id) return;
+    try {
+      await uploadProductImage(id as string, file);
+      setUploaded();
+			console.log('Image uploaded successfully');
+    } catch (error) {
+      console.error('Error uploading image:', error);
+    }
+  };
+
+  useEffect(() => {
+    setUploading(isLoading);
+  }, [isLoading]);
+
+  const props: UploadProps = {
     multiple: false,
     maxCount: 1,
-		accept: 'image/*',
+    accept: 'image/*',
     beforeUpload: (file: File) => {
       setFile(file);
       return false;
     },
     showUploadList: true,
   };
+
   return (
     <Card>
       <Title level={4}>Product Images</Title>
@@ -26,12 +54,17 @@ const ImageUploadForm = () => {
         image.
       </Text>
 
-      <Dragger {...props}>
+      <Dragger {...props} disabled={uploaded}>
         <p className='ant-upload-drag-icon'>
           <InboxOutlined />
         </p>
         <p className='ant-upload-text'>Click or drag file to this area to upload</p>
       </Dragger>
+      <div className='flex justify-end mt-4'>
+        <Button type='primary' disabled={uploaded} loading={false} onClick={handleUpload}>
+          Upload
+        </Button>
+      </div>
     </Card>
   );
 };

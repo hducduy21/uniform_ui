@@ -1,75 +1,102 @@
-import { useState } from "react"
-import { Steps, Button, Card, Typography, Space } from "antd"
-import { CheckOutlined } from "@ant-design/icons"
-import GeneralInfoForm from "@/components/modules/product/creation/GeneralInfoForm"
-import ImageUploadForm from "@/components/modules/product/creation/ImageUploadForm"
-import VariantsForm from "@/components/modules/product/creation/VariantForm"
+import { useState } from 'react';
+import { Steps, Button, Card, Typography, Space, Form } from 'antd';
+import { ArrowLeftOutlined, CheckOutlined, SaveOutlined } from '@ant-design/icons';
+import GeneralInfoForm from '@/components/modules/product/creation/GeneralInfoForm';
+import ImageUploadForm from '@/components/modules/product/creation/ImageUploadForm';
+import VariantsForm from '@/components/modules/product/creation/VariantForm';
+import { ProductRequest } from '@/types/dto';
 
-const { Title } = Typography
-
-const steps = [
-    {
-      title: "General Information",
-      content: (
-        <GeneralInfoForm/>
-      ),
-    },
-    {
-      title: "Upload Product Image",
-      content: (
-        <ImageUploadForm />
-      ),
-    },
-    {
-      title: "Variants",
-      content: (
-        <VariantsForm />
-      ),
-    },
-  ]
+const { Title } = Typography;
 
 const ProductCreation = () => {
-  const [currentStep, setCurrentStep] = useState(0)
-  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [id, setId] = useState<string | null>(null);
+  const [currentStep, setCurrentStep] = useState(0);
+  const [currentSubmit, setCurrentSubmit] = useState(0);
+  const [isSubmitting, setSubmitting] = useState(false);
+
+  const [form] = Form.useForm<ProductRequest>();
+
+  const steps = [
+    {
+      title: 'General Information',
+      content: (
+        <GeneralInfoForm
+          form={form}
+          submited={currentSubmit > currentStep}
+          setSubmiting={setSubmitting}
+          setId={setId}
+          setSubmited={() => {
+            setCurrentSubmit(1);
+          }}
+        />
+      ),
+    },
+    {
+      title: 'Upload Product Image',
+      content: (
+        <ImageUploadForm
+          id={id}
+          uploaded={currentSubmit > currentStep}
+          setUploading={setSubmitting}
+          setUploaded={() => {
+            setCurrentSubmit(2);
+          }}
+        />
+      ),
+    },
+    {
+      title: 'Variants',
+      content: <VariantsForm id='8c0ce1d9-bca5-44c2-b374-2c387367489e' />,
+    },
+  ];
 
   const handleNext = () => {
-      setCurrentStep(currentStep + 1)
-  }
+    setCurrentStep(currentStep + 1);
+  };
+  const handlePrev = () => {
+    setCurrentStep(currentStep - 1);
+  };
 
-  const handleSubmit = async () => {
-  }
+  const handleSubmit = async () => {};
 
   return (
     <div>
       <Title level={2}>Create New Product</Title>
 
-      <Card className="mb-4">
-        <Steps
-          current={currentStep}
-          items={steps.map((item) => ({ title: item.title }))}
-        />
+      <Card className='mb-4'>
+        <Steps current={currentSubmit} items={steps.map((item) => ({ title: item.title }))} />
 
-        <div className="mt-5 mb-6 steps-content">
-          {steps[currentStep].content}
-        </div>
+        <div className='mt-5 mb-6 steps-content'>{steps[currentStep].content}</div>
 
-        <div className="flex justify-end steps-action">
+        <div className='flex justify-between steps-action'>
+          <div>
+            {currentStep > 0 && (
+              <Button icon={<ArrowLeftOutlined />} onClick={handlePrev} disabled={isSubmitting}>
+                Previous
+              </Button>
+            )}
+          </div>
           <div>
             {currentStep < steps.length - 1 && (
-              <Button type="primary" onClick={handleNext} disabled={isSubmitting}>
-                Upload
+              <Button
+                variant='solid'
+                color='default'
+                onClick={handleNext}
+                // disabled={isSubmitting || currentSubmit == currentStep}
+              >
+                Next
               </Button>
             )}
             {currentStep === steps.length - 1 && (
               <Space>
                 <Button
-                  type="primary"
-                  icon={<CheckOutlined />}
+                  variant='solid'
+                  color='default'
+                  icon={<SaveOutlined />}
                   onClick={handleSubmit}
                   loading={isSubmitting}
-                  style={{ backgroundColor: "#52c41a", borderColor: "#52c41a" }}
                 >
-                  Upload and finish
+                  Save And Finish
                 </Button>
               </Space>
             )}
@@ -77,7 +104,7 @@ const ProductCreation = () => {
         </div>
       </Card>
     </div>
-  )
-}
+  );
+};
 
-export default ProductCreation
+export default ProductCreation;

@@ -1,4 +1,12 @@
-import { CategoryDetailType, EGender, SizesType, User } from "./model";
+import { CategoryDetailType, EGender, ProductStatus, SizesType, User } from "./model";
+
+export interface Page<T> {
+  content: T[]
+  totalElements: number
+  totalPages: number
+  size: number
+  number: number
+}
 
 export interface LoginCredentials {
     email: string
@@ -30,3 +38,14 @@ export type CategoryRequest = Pick<CategoryDetailType, 'name' | 'description' | 
 
 
 export type SizeRequest = Omit<SizesType, 'id'>
+
+export type ProductRequest = {
+  code: string;
+  name: string;
+  material?: string;
+  description?: string;
+  status?: ProductStatus;
+  price: number;
+  sizeTypeId: number;
+  hexColors?: string[];
+}

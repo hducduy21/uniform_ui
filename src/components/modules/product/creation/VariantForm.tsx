@@ -20,16 +20,16 @@ import {
 import { EditOutlined, DeleteOutlined, PlusOutlined } from "@ant-design/icons"
 import type { UploadFile } from "antd"
 import { ProductVariantType } from "@/types/model"
-import { productVariantMock } from "@/data/mock"
+import useVariant from "@/hooks/useVariant"
 
 const {  Text } = Typography
 
-const VariantsForm: React.FC = () => {
+const VariantsForm = ({id}: {id: string}) => {
   const [isModalVisible, setIsModalVisible] = useState(false)
   const [editingVariant, setEditingVariant] = useState<ProductVariantType | null>(null)
   const [form] = Form.useForm()
   const [fileList, setFileList] = useState<UploadFile[]>([])
-  
+	const {variant} = useVariant(id)
 
   const showEditModal = (variant: ProductVariantType) => {
     setEditingVariant(variant)
@@ -75,8 +75,8 @@ const VariantsForm: React.FC = () => {
     },
     {
       title: "Price",
-      dataIndex: "price",
-      key: "price",
+      dataIndex: "costPrice",
+      key: "costPrice",
       render: (price: number) => `$${price}`,
     },
     {
@@ -120,7 +120,7 @@ const VariantsForm: React.FC = () => {
         images for each variant.
       </Text>
 
-      <Table dataSource={productVariantMock} columns={columns} rowKey="id" pagination={false} bordered />
+      <Table dataSource={variant || []} columns={columns} rowKey="id" pagination={false} bordered />
 
       <Modal title="Edit Variant" open={isModalVisible} onCancel={handleCancel} okText="Save">
         {editingVariant && (

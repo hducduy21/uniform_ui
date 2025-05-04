@@ -6,7 +6,7 @@ export interface ProductType {
   category: CategoryType
   description: string
   status: ProductStatus
-  sizes: SizesType
+  sizeType: SizesType
   rating: number
   totalRates: number
   colors: ColorType[]

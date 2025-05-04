@@ -14,7 +14,8 @@ import {
 } from 'antd';
 import { SearchOutlined, ReloadOutlined, EyeOutlined } from '@ant-design/icons';
 import { ProductGeneralAdminType, ProductStatus } from '@/types/model';
-import { mockProducts, rootCategories } from '@/data/mock';
+import { useManageProduct } from '@/hooks/useManageProduct';
+import useCategory from '@/hooks/useCategory';
 const { Option } = Select;
 
 const columns = [
@@ -62,20 +63,17 @@ const columns = [
     title: 'Views',
     dataIndex: 'views',
     key: 'views',
-    sorter: true,
   },
   {
     title: 'Rating',
     dataIndex: 'rating',
     key: 'rating',
-    sorter: true,
     render: (rating: number) => rating.toFixed(1),
   },
   {
     title: 'Total Rates',
     dataIndex: 'totalRates',
     key: 'totalRates',
-    sorter: true,
   },
   {
     title: 'Action',
@@ -106,7 +104,8 @@ type FilterType = {
 
 const ProductManagement: React.FC = () => {
   const [form] = Form.useForm();
-  const [products, setProducts] = useState<ProductGeneralAdminType[]>(mockProducts);
+  const { products } = useManageProduct()
+	console.log(products)
 
   const [filters, setFilters] = useState({
     category: undefined,
@@ -160,7 +159,7 @@ const ProductManagement: React.FC = () => {
           rowKey='id'
           rowSelection={rowSelection}
           columns={columns}
-          dataSource={products}
+          dataSource={products?.content || []}
           pagination={false}
           scroll={{ y: 'calc(100vh - 300px)' }}
         />
@@ -176,6 +175,8 @@ type FilterProps = {
 };
 
 const Filter = ({ form, filters, handleResetFilters }: FilterProps) => {
+	const {categories} = useCategory()
+	
   return (
     <Form
       form={form}
@@ -189,7 +190,7 @@ const Filter = ({ form, filters, handleResetFilters }: FilterProps) => {
 
       <Form.Item className='flex-1' name='category'>
         <Select placeholder='Select category' allowClear>
-          {rootCategories.map((category) => (
+          {categories && categories.map((category) => (
             <Option key={category.id} value={category.id}>
               {category.name}
             </Option>
