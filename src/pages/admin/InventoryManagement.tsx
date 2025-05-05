@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import {
   Table,
   Button,
@@ -60,7 +60,7 @@ const columns = [
 		title: 'Action',
 		dataIndex: 'action',
 		key: 'action',
-		render: (_: any, record: ProductVariantType) => (
+		render: (_: any) => (
 			<Button type='primary'>Update</Button>
 		),
   },
@@ -68,13 +68,12 @@ const columns = [
 
 export const InventoryManagement = () => {
   const [form] = Form.useForm();
-  const [products, setProducts] = useState<ProductVariantType[]>(productVariantMock);
+  const [products] = useState<ProductVariantType[]>(productVariantMock);
 
   const [filters, setFilters] = useState({
     productCode: undefined,
     productName: undefined,
   });
-  const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
 
   const handleResetFilters = () => {
     form.resetFields();

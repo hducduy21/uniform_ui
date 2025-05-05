@@ -3,19 +3,14 @@ import GeneralInfoForm from '@/components/modules/product/creation/GeneralInfoFo
 import VariantsForm from '@/components/modules/product/creation/VariantForm';
 import ProductDetail from '../ProductDetail';
 import { useParams } from 'react-router-dom';
-import { useManageProduct } from '@/hooks/useManageProduct';
-import { use, useEffect, useState } from 'react';
-import { ProductType } from '@/types/model';
+import { useEffect } from 'react';
 import useGetProductDetail from '@/hooks/useGetProductDetail';
 import { ProductRequest } from '@/types/dto';
-import { products } from '@/data/mock';
-
-const { TabPane } = Tabs;
 
 const ProductDetailManagement = () => {
   const { id } = useParams<{ id: string }>();
 
-  const { product, isLoading } = useGetProductDetail(id as string);
+  const { product } = useGetProductDetail(id as string);
   const [form] = Form.useForm<ProductRequest>();
 
   useEffect(() => {

@@ -24,7 +24,7 @@ export const login = async (credentials: LoginCredentials): Promise<AuthResponse
 
 export const register = async (credentials: RegisterFormData): Promise<void> => {
   try {
-    await api.post<AuthResponse>("/user/register", credentials);
+    await api.post<AuthResponse>("/users/register", credentials);
   } catch (error) {
     if (axios.isAxiosError(error)) {
       console.error("Error message:", error.response?.data.message);

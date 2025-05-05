@@ -85,7 +85,7 @@ const ProductDetail = () => {
                 </div>
               </div>
               <div className="grid grid-cols-6 gap-2">
-                {product.sizes.elements.map((size) => (
+                {product.sizeType.elements.map((size) => (
                   <button
                     key={size}
                     className={`py-2 border ${

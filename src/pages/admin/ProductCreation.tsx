@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Steps, Button, Card, Typography, Space, Form } from 'antd';
-import { ArrowLeftOutlined, CheckOutlined, SaveOutlined } from '@ant-design/icons';
+import { ArrowLeftOutlined, SaveOutlined } from '@ant-design/icons';
 import GeneralInfoForm from '@/components/modules/product/creation/GeneralInfoForm';
 import ImageUploadForm from '@/components/modules/product/creation/ImageUploadForm';
 import VariantsForm from '@/components/modules/product/creation/VariantForm';

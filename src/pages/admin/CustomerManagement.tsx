@@ -1,138 +1,35 @@
 import type React from 'react';
-import { useState } from 'react';
-import {
-  Table,
-  Button,
-  Space,
-  Tag,
-  Form,
-  Select,
-  Input,
-  FormInstance,
-} from 'antd';
+import { useEffect, useState } from 'react';
+import { Table, Button, Space, Tag, Form, Select, Input, FormInstance } from 'antd';
 import { SearchOutlined, ReloadOutlined } from '@ant-design/icons';
+import useManageUser from '@/hooks/useManageUser';
+import { UserFilter } from '@/types/dto';
 import { UserDetailType } from '@/types/model';
-import { mockUsers } from '@/data/mock';
 const { Option } = Select;
 
-const columns = [
-  {
-    title: 'First Name',
-    dataIndex: 'firstName',
-    key: 'firstName',
-    width: '100px',
-  },
-  {
-    title: 'Last Name',
-    dataIndex: 'lastName',
-    key: 'lastName',
-    width: '100px',
-  },
-  {
-    title: 'Email',
-    dataIndex: 'email',
-    key: 'email',
-  },
-  {
-    title: 'Phone Number',
-    dataIndex: 'phoneNumber',
-    key: 'phoneNumber',
-  },
-  {
-    title: 'Gender',
-    dataIndex: 'gender',
-    key: 'gender',
-    width: '100px',
-    render: (e: string) => {
-        return <Tag>{e}</Tag>
-    }
-  },
-  {
-    title: 'Birth Date',
-    dataIndex: 'birthday',
-    key: 'birthday',
-    render: (dateOfBirth: string) => {
-      const date = new Date(dateOfBirth);
-      return date.toLocaleDateString('en-US', {
-        year: 'numeric',
-        month: '2-digit',
-        day: '2-digit',
-      });
-    },
-  },
-  {
-    title: 'Created At',
-    dataIndex: 'createdAt',
-    key: 'createdAt',
-    render: (createAt: string) => {
-      const date = new Date(createAt);
-      return date.toLocaleDateString('en-US', {
-        year: 'numeric',
-        month: '2-digit',
-        day: '2-digit',
-      });
-    },
-  },
-  {
-    title: 'Locked',
-    dataIndex: 'locked',
-    key: 'locked',
-    render: (locked: boolean) => {
-      return <Tag color={locked ? 'red' : 'green'}>{locked ? 'Locked' : 'Unlocked'}</Tag>;
-    },
-  },
-  {
-    title: 'Enabled',
-    dataIndex: 'enabled',
-    key: 'enabled',
-    render: (enabled: boolean) => {
-      return <Tag color={enabled ? 'green' : 'red'}>{enabled ? 'Enabled' : 'Disabled'}</Tag>;
-    }
-  },
-  {
-    title: 'Action',
-    key: 'action',
-    render: () => (
-        <Button type='primary' color='red' className='text-small' >
-          Lock Account
-        </Button>
-    ),
-  },
-];
-
-type FilterType = {
-  category: string | undefined;
-  status: string | undefined;
-  minPrice: string | undefined;
-  maxPrice: string | undefined;
-  code: string | undefined;
-  sortBy: string | undefined;
-};
-
 const CustomerManagement: React.FC = () => {
-  const [form] = Form.useForm();
-  const [users, setUsers] = useState<UserDetailType[]>(mockUsers);
+  const [form] = Form.useForm<UserFilter>();
+  const { users, updateFilters, lockUser, unlockUser, isLoading } = useManageUser({
+    filters: form.getFieldsValue(),
+  });
 
-  const [filters, setFilters] = useState({
-    category: undefined,
-    status: undefined,
-    minPrice: undefined,
-    maxPrice: undefined,
-    code: undefined,
-    sortBy: undefined,
+  const [filters, setFilters] = useState<UserFilter>({
+    email: undefined,
+    phoneNumber: undefined,
+    locked: undefined,
+    enabled: undefined,
   });
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
 
   const handleResetFilters = () => {
-    form.resetFields();
-    setFilters({
-      category: undefined,
-      status: undefined,
-      minPrice: undefined,
-      maxPrice: undefined,
-      code: undefined,
-      sortBy: undefined,
-    });
+		const emptyFilters: UserFilter = {
+      email: undefined,
+      phoneNumber: undefined,
+      locked: undefined,
+      enabled: undefined,
+    }
+    setFilters(emptyFilters);
+		form.setFieldsValue(emptyFilters);
   };
 
   const rowSelection = {
@@ -142,16 +39,133 @@ const CustomerManagement: React.FC = () => {
     },
   };
 
+  const handleFilterData = () => {
+    setFilters(form.getFieldsValue());
+  };
+
+  useEffect(() => {
+    updateFilters({ filters, pagination: { page: 1, size: 10 } });
+  }, [filters]);
+
+  const columns = [
+    {
+      title: 'First Name',
+      dataIndex: 'firstName',
+      key: 'firstName',
+      width: '100px',
+    },
+    {
+      title: 'Last Name',
+      dataIndex: 'lastName',
+      key: 'lastName',
+      width: '100px',
+    },
+    {
+      title: 'Email',
+      dataIndex: 'email',
+      key: 'email',
+    },
+    {
+      title: 'Phone Number',
+      dataIndex: 'phoneNumber',
+      key: 'phoneNumber',
+    },
+    {
+      title: 'Gender',
+      dataIndex: 'gender',
+      key: 'gender',
+      width: '100px',
+      render: (e: string) => {
+        return <Tag>{e}</Tag>;
+      },
+    },
+    {
+      title: 'Birth Date',
+      dataIndex: 'birthday',
+      key: 'birthday',
+      render: (dateOfBirth: string) => {
+        const date = new Date(dateOfBirth);
+        return date.toLocaleDateString('en-US', {
+          year: 'numeric',
+          month: '2-digit',
+          day: '2-digit',
+        });
+      },
+    },
+    {
+      title: 'Created At',
+      dataIndex: 'createdAt',
+      key: 'createdAt',
+      render: (createAt: string) => {
+        const date = new Date(createAt);
+        return date.toLocaleDateString('en-US', {
+          year: 'numeric',
+          month: '2-digit',
+          day: '2-digit',
+        });
+      },
+    },
+    {
+      title: 'Locked',
+      dataIndex: 'locked',
+      key: 'locked',
+      render: (locked: boolean) => {
+        return <Tag color={locked ? 'red' : 'green'}>{locked ? 'Locked' : 'Unlocked'}</Tag>;
+      },
+    },
+    {
+      title: 'Enabled',
+      dataIndex: 'enabled',
+      key: 'enabled',
+      render: (enabled: boolean) => {
+        return <Tag color={enabled ? 'green' : 'red'}>{enabled ? 'Enabled' : 'Disabled'}</Tag>;
+      },
+    },
+    {
+      title: 'Action',
+      key: 'action',
+      render: (_: any, record: UserDetailType) => (
+        <>
+          {record.locked ? (
+            <Button
+              type='primary'
+              color='red'
+              className='text-small'
+              onClick={() => {
+                unlockUser(record.id);
+              }}
+            >
+              Unlock
+            </Button>
+          ) : (
+            <Button
+              variant='solid'
+              color='red'
+              className='text-small'
+              onClick={() => {
+                lockUser(record.id);
+              }}
+            >
+              Lock
+            </Button>
+          )}
+        </>
+      ),
+    },
+  ];
+
   return (
     <div className='flex flex-col w-full h-full overflow-hidden'>
       {/* Filter Products */}
-      <Filter form={form} filters={filters} handleResetFilters={handleResetFilters} />
+      <Filter
+        form={form}
+        filters={filters}
+        handleFilterData={handleFilterData}
+        handleResetFilters={handleResetFilters}
+      />
 
       {/* Bulk Actions */}
-      <BulkActions
-        selectedRowKeys={selectedRowKeys}
-        setSelectedRowKeys={setSelectedRowKeys}
-      />
+      <BulkActions selectedRowKeys={selectedRowKeys} setSelectedRowKeys={setSelectedRowKeys} />
 
       {/* Product Table */}
       <div className='flex-1 w-full h-full overflow-hidden'>
@@ -159,9 +173,10 @@ const CustomerManagement: React.FC = () => {
           rowKey='id'
           rowSelection={rowSelection}
           columns={columns}
-          dataSource={users}
+          dataSource={users?.content || []}
           pagination={false}
           scroll={{ y: 'calc(100vh - 200px)' }}
+          loading={isLoading}
         />
       </div>
     </div>
@@ -170,11 +185,12 @@ const CustomerManagement: React.FC = () => {
 
 type FilterProps = {
   form: FormInstance;
-  filters: FilterType;
+  filters: UserFilter;
+  handleFilterData: () => void;
   handleResetFilters: () => void;
 };
 
-const Filter = ({ form, filters, handleResetFilters }: FilterProps) => {
+const Filter = ({ form, filters, handleFilterData, handleResetFilters }: FilterProps) => {
   return (
     <Form
       form={form}
@@ -190,18 +206,17 @@ const Filter = ({ form, filters, handleResetFilters }: FilterProps) => {
         <Input placeholder='Search by phone number' />
       </Form.Item>
 
-
       <Form.Item className='flex-1' name='locked'>
         <Select placeholder='Account locked' allowClear>
-            <Option value={true}>Locked</Option>
-            <Option value={false}>Unlocked</Option>
+          <Option value={true}>Locked</Option>
+          <Option value={false}>Unlocked</Option>
         </Select>
       </Form.Item>
 
       <Form.Item className='flex-1' name='enabled'>
         <Select placeholder='Account enabled' allowClear>
-            <Option value={true}>Enable</Option>
-            <Option value={false}>Disable</Option>
+          <Option value={true}>Enable</Option>
+          <Option value={false}>Disable</Option>
         </Select>
       </Form.Item>
 
@@ -209,7 +224,7 @@ const Filter = ({ form, filters, handleResetFilters }: FilterProps) => {
         Reset
       </Button>
 
-      <Button type='primary' icon={<SearchOutlined />} htmlType='submit'>
+      <Button type='primary' onClick={handleFilterData} icon={<SearchOutlined />} htmlType='submit'>
         Search
       </Button>
     </Form>
