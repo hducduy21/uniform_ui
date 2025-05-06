@@ -11,7 +11,7 @@ import { useProfile } from '@/hooks/useProfile';
 export type ProfileFormData = User
 
 const Profile = () => {
-  const {user} = useProfile();
+  const {user, updateProfile} = useProfile();
   
   const [formData, setFormData] = useState<ProfileFormData>({
     id: '',
@@ -31,25 +31,24 @@ const Profile = () => {
   const [errors, setErrors] = useState<ErrorType<ProfileFormData>>({});
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    const { name, value, type } = e.target;
-    const checked = type === 'checkbox' ? (e.target as HTMLInputElement).checked : undefined;
-
-    setFormData({
-      ...formData,
-      [name]: type === 'checkbox' ? checked : value,
-    });
+    const { id, value } = e.target;
+    setFormData((prev) => ({ ...prev, [id]: value }));
+    if (errors[id as keyof ProfileFormData]) {
+      setErrors((prev) => ({ ...prev, [id]: undefined }));
+    }
   };
 
   const handleGenderChange = (value: EGender) => {
     setFormData((prev) => ({ ...prev, gender: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    setErrors(validateEditProfileForm(formData));
+    const validationErrors = validateEditProfileForm(formData);
+    setErrors(validationErrors);
     if (Object.keys(errors).length === 0) {
-      console.log('Form submitted:', formData);
+      await updateProfile(formData);
     }
   };
 
@@ -67,7 +66,7 @@ const Profile = () => {
               id='firstName'
               label='First Name'
               type='text'
-              value={formData.firstName!}
+              defaultValue={formData.firstName!}
               onChange={handleChange}
               required
               error={errors.firstName}
@@ -76,7 +75,7 @@ const Profile = () => {
               id='lastName'
               label='Last Name'
               type='text'
-              value={formData.lastName!}
+              defaultValue={formData.lastName!}
               onChange={handleChange}
               required
               error={errors.lastName}
@@ -89,7 +88,7 @@ const Profile = () => {
               id='email'
               label='Email Address'
               type='email'
-              value={formData.email!}
+              defaultValue={formData.email!}
               onChange={handleChange}
               placeholder='example@domain.com'
               required
@@ -99,7 +98,7 @@ const Profile = () => {
               id='phoneNumber'
               label='Phone Number'
               type='tel'
-              value={formData.phoneNumber!}
+              defaultValue={formData.phoneNumber!}
               onChange={handleChange}
               placeholder='+84 123456789'
               required
@@ -113,7 +112,7 @@ const Profile = () => {
               id='birthday'
               label='Birthday'
               type='date'
-              value={formData.birthday!}
+              defaultValue={formData.birthday!}
               onChange={handleChange}
               required
               error={errors.birthday}

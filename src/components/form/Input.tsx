@@ -4,7 +4,8 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   id: string;
   label: string;
   type: string;
-  value: string;
+  value?: string;
+  defaultValue?: string;
   onChange: (e: ChangeEvent<HTMLInputElement>) => void;
   placeholder?: string;
   disabled?: boolean;
@@ -17,6 +18,7 @@ const Input = ({
   label,
   type,
   value,
+  defaultValue,
   onChange,
   placeholder,
   disabled = false,
@@ -36,6 +38,7 @@ const Input = ({
         type={type}
         id={id}
         value={value}
+        defaultValue={defaultValue}
         onChange={onChange}
         placeholder={placeholder}
         disabled={disabled}

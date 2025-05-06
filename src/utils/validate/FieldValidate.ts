@@ -19,7 +19,7 @@ export const passwordValidator = <T extends { password: string }>(formData: T): 
 
 export const phoneNumberValidator = <T extends { phoneNumber: string }>(formData: T): ErrorType<T> => {
   const errors: ErrorType<T> = {};
-  if (!formData.phoneNumber.match(/^\+?[\d\s-]{10,}$/)) {
+  if (!formData.phoneNumber.match(/^\+?[\d\s-]{10,12}$/)) {
     errors.phoneNumber = 'Please enter a valid phone number';
   }
   return errors;

@@ -2,6 +2,7 @@
 
 import CheckBox from "@/components/form/CheckBox"
 import Input from "@/components/form/Input"
+import { useProfile } from "@/hooks/useProfile"
 import { ErrorType } from "@/types/utils"
 import { validateChangePasswordForm } from "@/utils/validate/Validate"
 import type React from "react"
@@ -16,6 +17,8 @@ export interface ChangePasswordFormData {
 }
 
 const ChangePassword = () => {
+  const {changePassword} = useProfile()
+
   const [formData, setFormData] = useState<ChangePasswordFormData>({
       currentPassword: '',
       password: '',
@@ -33,12 +36,13 @@ const ChangePassword = () => {
       }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-
-    setErrors(validateChangePasswordForm(formData))
-    if (Object.keys(errors).length > 0) {
-      console.log('Form submitted:', formData);
+    
+    const validationErrors = validateChangePasswordForm(formData);
+    setErrors(validationErrors);
+    if (Object.keys(errors).length === 0) {
+      await changePassword(formData)
     }
   }
 

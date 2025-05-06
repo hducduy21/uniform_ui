@@ -1,3 +1,4 @@
+import { ChangePasswordFormData } from '@/pages/account/ChangePassword';
 import userService from '@/services/userService';
 import { User } from '@/types/model';
 import useSWR from 'swr';
@@ -16,11 +17,16 @@ export function useProfile() {
       mutate();
     }
   };
-  
+
+  const changePassword = async (form: ChangePasswordFormData) => {
+    await userService.changePassword(form);
+  }
   return {
     user,
     isLoading,
     error,
     mutate,
+    updateProfile,
+    changePassword
   };
 }
