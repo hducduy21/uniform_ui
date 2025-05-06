@@ -40,7 +40,6 @@ const Login = () => {
   
   const handleLogin = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    
     const validationErrors = validateLoginForm(formData);
     setErrors(validationErrors);
 

@@ -24,7 +24,7 @@ export function convertProductFilterToUrlParams(filter: ProductFilterType, pagin
   const params = new URLSearchParams();
 
   if (filter.search) {
-    params.append('search', filter.search);
+    params.append('search', filter.search.join(','));
   }
 
   if (filter.categories?.length) {

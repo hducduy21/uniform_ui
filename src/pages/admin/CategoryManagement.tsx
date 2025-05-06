@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Table, Button, Space, Modal, Form, Input, Select, Card, Tag } from 'antd';
 import { PlusOutlined, EditOutlined } from '@ant-design/icons';
 import { CategoryDetailType, CategoryStatus } from '@/types/model';
-import { useManageCategory } from '@/hooks/useManageCategory';
+import { useManageCategory } from '@/hooks/data/useManageCategory';
 import { CategoryRequest } from '@/types/dto';
 
 const { Option } = Select;

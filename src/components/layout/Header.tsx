@@ -6,7 +6,7 @@ import CategoryDropdown from './CategoryDropdown';
 import LanguageSwitcher from './LanguageSwitcher';
 import { Heart, ShoppingBag } from 'lucide-react';
 import images from '@/assets';
-import useTreeCategory from '@/hooks/useTreeCategories';
+import useTreeCategory from '@/hooks/data/useTreeCategories';
 
 const Header = () => {
   const [activeTab, setActiveTab] = useState<number>(1);

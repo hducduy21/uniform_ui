@@ -1,20 +1,25 @@
-import { ColorType } from "@/types/model";
+import { ColorType } from '@/types/model';
 
 type ColorComponentSize = Record<'md' | 'xl', string>;
 
 const ColorSize: ColorComponentSize = {
   md: 'h-5 w-5',
-  xl: 'h-8 w-8'
+  xl: 'h-8 w-8',
 };
 
-type ColorComponentProps = {
-    item?: ColorType
-    size?: keyof ColorComponentSize
-    color?: string
-}
+interface ColorComponentProps extends React.HTMLAttributes<HTMLDivElement> {
+  item?: ColorType;
+  size?: keyof ColorComponentSize;
+  color?: string;
+  checked?: boolean;
+};
 
-export default function Color({ size='md', item, color }:  ColorComponentProps) {
+export default function Color({ size = 'md', item, color, checked = false, ...props }: ColorComponentProps) {
   return (
-    <div className={`${ColorSize[size]} rounded-full border border-gray-300`} style={{backgroundColor: color || item?.hexCode}} />
+    <div
+      className={`${ColorSize[size]} border ${checked ? 'border-4 border-slate-500 shadow-md scale-105' : 'border-gray-100'} rounded-full`}
+      style={{ backgroundColor: color || item?.hexCode }}
+      {...props}
+    />
   );
 }

@@ -4,7 +4,7 @@ import BotNav from "../components/layout/BotNav"
 
 const Layout = () => {
   return (
-    <div className="h-50 relative">
+    <div className="relative h-50">
       <Header />
       <main className="h-full">
         <Outlet />

@@ -14,8 +14,8 @@ import {
 } from 'antd';
 import { SearchOutlined, ReloadOutlined, EyeOutlined } from '@ant-design/icons';
 import { ProductGeneralAdminType, ProductStatus } from '@/types/model';
-import { useManageProduct } from '@/hooks/useManageProduct';
-import useCategory from '@/hooks/useCategory';
+import { useManageProduct } from '@/hooks/data/useManageProduct';
+import useCategory from '@/hooks/data/useCategory';
 const { Option } = Select;
 
 const columns = [
@@ -98,7 +98,7 @@ type FilterType = {
   status: string | undefined;
   minPrice: string | undefined;
   maxPrice: string | undefined;
-  code: string | undefined;
+  search: string | undefined;
   sortBy: string | undefined;
 };
 
@@ -112,7 +112,7 @@ const ProductManagement: React.FC = () => {
     status: undefined,
     minPrice: undefined,
     maxPrice: undefined,
-    code: undefined,
+    search: undefined,
     sortBy: undefined,
   });
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
@@ -124,7 +124,7 @@ const ProductManagement: React.FC = () => {
       status: undefined,
       minPrice: undefined,
       maxPrice: undefined,
-      code: undefined,
+      search: undefined,
       sortBy: undefined,
     });
   };
@@ -184,8 +184,8 @@ const Filter = ({ form, filters, handleResetFilters }: FilterProps) => {
       layout='vertical'
       initialValues={filters}
     >
-      <Form.Item className='flex-1' name='code'>
-        <Input placeholder='Enter product code' />
+      <Form.Item className='flex-1' name='search'>
+        <Input placeholder='Enter product name' />
       </Form.Item>
 
       <Form.Item className='flex-1' name='category'>

@@ -2,7 +2,7 @@ import type React from 'react';
 import { useEffect, useState } from 'react';
 import { Table, Button, Space, Tag, Form, Select, Input, FormInstance } from 'antd';
 import { SearchOutlined, ReloadOutlined } from '@ant-design/icons';
-import useManageUser from '@/hooks/useManageUser';
+import useManageUser from '@/hooks/data/useManageUser';
 import { UserFilter } from '@/types/dto';
 import { UserDetailType } from '@/types/model';
 const { Option } = Select;

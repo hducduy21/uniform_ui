@@ -1,4 +1,4 @@
-import useCategory from '@/hooks/useCategory';
+import useCategory from '@/hooks/data/useCategory';
 import { FilterOption, ProductFilterType } from '@/types/utils';
 import { X } from 'lucide-react';
 

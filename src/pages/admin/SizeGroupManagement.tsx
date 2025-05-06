@@ -7,7 +7,7 @@ import {
   MinusCircleOutlined,
 } from '@ant-design/icons';
 import type { SizesType } from '@/types/model';
-import { useSize } from '@/hooks/useSize';
+import { useSize } from '@/hooks/data/useSize';
 import { SizeRequest } from '@/types/dto';
 
 const SizeGroupManagement = () => {

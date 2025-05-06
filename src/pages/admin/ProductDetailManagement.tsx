@@ -4,7 +4,7 @@ import VariantsForm from '@/components/modules/product/creation/VariantForm';
 import ProductDetail from '../ProductDetail';
 import { useParams } from 'react-router-dom';
 import { useEffect } from 'react';
-import useGetProductDetail from '@/hooks/useGetProductDetail';
+import useGetProductDetail from '@/hooks/data/useGetProductDetail';
 import { ProductRequest } from '@/types/dto';
 
 const ProductDetailManagement = () => {

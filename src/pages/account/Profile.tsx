@@ -6,8 +6,7 @@ import { ErrorType } from '@/types/utils';
 import Radio from '@/components/form/Radio';
 import { EGender, User } from '@/types/model';
 import { validateEditProfileForm } from '@/utils/validate/Validate';
-import { useProfile } from '@/hooks/useProfile';
-
+import { useProfile } from '@/hooks/data/useProfile';
 export type ProfileFormData = User
 
 const Profile = () => {
@@ -44,7 +43,6 @@ const Profile = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
     const validationErrors = validateEditProfileForm(formData);
     setErrors(validationErrors);
     if (Object.keys(errors).length === 0) {

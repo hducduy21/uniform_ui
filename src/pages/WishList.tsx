@@ -1,24 +1,9 @@
-import ProductFilter from "@/components/modules/product/filter/ProductFilter";
 import ProductCard from "@/components/modules/product/ProductCard";
-import { filtersMock, products } from "@/data/mock";
-import { FilterState } from "@/types/type";
-import { useState } from "react";
+import {products } from "@/data/mock";
 
 const WishList = () => {
-    const [filters, setFilters] = useState<FilterState>({
-    categories: [],
-    status: [],
-    priceRange: null,
-    })
-
-    const handleFilterChange = (newFilters: FilterState) => {
-    setFilters(newFilters)
-    }
   return (
     <div className="pt-16 pb-24 bg-white">
-
-      {/* Filter bar */}
-      <ProductFilter onFilterChange={handleFilterChange} initialFilters={filters} availableFilters={filtersMock} />
 
       {/* Product grid */}
       <div className="container px-4 mx-auto mt-6">

@@ -2,7 +2,7 @@
 
 import CheckBox from "@/components/form/CheckBox"
 import Input from "@/components/form/Input"
-import { useProfile } from "@/hooks/useProfile"
+import { useProfile } from "@/hooks/data/useProfile"
 import { ErrorType } from "@/types/utils"
 import { validateChangePasswordForm } from "@/utils/validate/Validate"
 import type React from "react"

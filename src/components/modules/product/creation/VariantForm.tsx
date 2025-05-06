@@ -8,12 +8,12 @@ import {
   Input,
 } from "antd"
 import { ProductVariantType } from "@/types/model"
-import useVariant from "@/hooks/useVariant"
+import useVariant from "@/hooks/data/useVariant"
 
 const {  Text } = Typography
 
 const VariantsForm = ({id}: {id: string}) => {
-	const {variant, updateVariant} = useVariant(id)
+	const {variant, updateVariant, isUpdating} = useVariant(id)
 	const [editedVariants, setEditedVariants] = useState<Map<number, number>>(new Map())
 
 	const handleUpdateVariantPrice = async () => {
@@ -72,7 +72,7 @@ const VariantsForm = ({id}: {id: string}) => {
 
       <Table dataSource={variant || []} columns={columns} rowKey="id" pagination={false} bordered />
 			<div className='flex justify-end mt-4'>
-        <Button type='primary' loading={false} onClick={handleUpdateVariantPrice}>
+        <Button type='primary' loading={isUpdating} onClick={handleUpdateVariantPrice}>
           Upload
         </Button>
       </div>

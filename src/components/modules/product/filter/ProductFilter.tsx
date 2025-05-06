@@ -17,8 +17,8 @@ const ProductFilter: React.FC<ProductFilterProps> = ({
 }) => {
   const [activeFilter, setActiveFilter] = useState<string | null>(null);
   const [filters, setFilters] = useState<ProductFilterType>(
-    initialFilters ?? { categories: [], status: [], priceRange: null }
-  );
+    initialFilters || {search: [],  categories: [], status: [], priceRange: null }
+  )
 
   const appliedFiltersCount = filters.categories.length + filters.status.length + (filters.priceRange ? 1 : 0);
 
@@ -39,7 +39,7 @@ const ProductFilter: React.FC<ProductFilterProps> = ({
   }, []);
 
   const clearFilters = useCallback(() => {
-    setFilters({ categories: [], status: [], priceRange: null });
+    setFilters({search: [], categories: [], status: [], priceRange: null });
   }, []);
 
   const clearFilterType = useCallback((filterType: keyof ProductFilterType) => {

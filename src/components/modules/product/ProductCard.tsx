@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { Heart, Star } from 'lucide-react';
 import { ProductGeneralType } from '@/types/model';
 import Color from './Color';
+import { formatUSD } from '@/utils/formatUtil';
 
 const ProductCard = ({ product }: { product: ProductGeneralType }) => {
   return (
@@ -36,7 +37,7 @@ const ProductCard = ({ product }: { product: ProductGeneralType }) => {
           <Link to={`/product/${product.id}`} className='block'>
             <h3 className='text-sm font-medium'>{product.name}</h3>
           </Link>
-          <div className='mt-1 text-sm font-medium'>{product.price}</div>
+          <div className='mt-1 text-sm font-medium'>{formatUSD(product.price)}</div>
           <div className='mt-1 text-xs text-gray-500'>{product.description}</div>
           <div className='flex items-center mt-1'>
             <div className='flex items-center'>

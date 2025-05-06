@@ -1,4 +1,6 @@
 import variantsService from '@/services/variantsService';
+import { useState } from 'react';
+import { toast } from 'react-toastify';
 import useSWR from 'swr';
 
 const useVariant = (productId: string) => {
@@ -7,19 +9,29 @@ const useVariant = (productId: string) => {
     variantsService.getVariants
   );
 
+  const [isUpdating, setIsUpdating] = useState(false);
   const updateVariant = async (
     productId: string,
     productVariantsCostPriceMap: Map<number, number>
   ) => {
-    variantsService.updateVariants(productId, productVariantsCostPriceMap);
-    mutate();
+    setIsUpdating(true);
+    try {
+      await variantsService.updateVariants(productId, productVariantsCostPriceMap);
+      mutate();
+      toast.success('Update variants successfully');
+    } catch (error: any) {
+      toast.error(error.message);
+    } finally {
+      setIsUpdating(false);
+    }
   };
 
   return {
     variant: data,
     isLoading,
+    isUpdating,
     error,
-    updateVariant
+    updateVariant,
   };
 };
 

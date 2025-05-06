@@ -1,5 +1,6 @@
 import QuantitySelector from "@/components/form/QuantitySelector"
 import { CartType } from "@/types/model"
+import { formatUSD } from "@/utils/formatUtil"
 import { X } from "lucide-react"
 
 type ProductCartProps = {
@@ -23,7 +24,7 @@ const ProductCart = ({cartItem, removeItem, updateQuantity}: ProductCartProps) =
                 <h3 className="text-base font-medium">{cartItem.productVariant.product.name}</h3>
                 <p className="mt-1 text-sm">Color: {cartItem.productVariant.color}</p>
                 <p className="mt-1 text-sm">Size: {cartItem.productVariant.size}</p>
-                <p className="mt-2 text-sm font-medium">{cartItem.productVariant.costPrice}</p>
+                <p className="mt-2 text-sm font-medium">{formatUSD(cartItem.productVariant.costPrice)}</p>
               </div>
               <button
                 onClick={()=>removeItem(cartItem.id)}
@@ -43,7 +44,7 @@ const ProductCart = ({cartItem, removeItem, updateQuantity}: ProductCartProps) =
             <div className="flex justify-end mt-4">
               <div className="text-right">
                 <p className="text-sm text-gray-500">Total:</p>
-                <p className="text-base font-medium">{cartItem.quantity * cartItem.productVariant.costPrice}</p>
+                <p className="text-base font-medium">{formatUSD(cartItem.quantity * cartItem.productVariant.costPrice)}</p>
               </div>
             </div>
           </div>

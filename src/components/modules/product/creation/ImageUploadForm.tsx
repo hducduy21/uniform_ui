@@ -1,4 +1,4 @@
-import { useManageProduct } from '@/hooks/useManageProduct';
+import { useManageProduct } from '@/hooks/data/useManageProduct';
 import { InboxOutlined } from '@ant-design/icons';
 import { Button, Card, Typography, Upload, UploadProps } from 'antd';
 import { useEffect, useState } from 'react';
@@ -18,7 +18,7 @@ const ImageUploadForm = ({
   setUploaded: () => void;
 }) => {
   const [file, setFile] = useState<File | null>(null);
-  const { uploadProductImage, isLoading } = useManageProduct();
+  const { uploadProductImage, isUploading } = useManageProduct();
 
   const handleUpload = async () => {
     if (!file || !id) return;
@@ -32,8 +32,8 @@ const ImageUploadForm = ({
   };
 
   useEffect(() => {
-    setUploading(isLoading);
-  }, [isLoading]);
+    setUploading(isUploading);
+  }, [isUploading]);
 
   const props: UploadProps = {
     multiple: false,
@@ -61,7 +61,7 @@ const ImageUploadForm = ({
         <p className='ant-upload-text'>Click or drag file to this area to upload</p>
       </Dragger>
       <div className='flex justify-end mt-4'>
-        <Button type='primary' disabled={uploaded} loading={false} onClick={handleUpload}>
+        <Button type='primary' disabled={uploaded} loading={isUploading} onClick={handleUpload}>
           Upload
         </Button>
       </div>

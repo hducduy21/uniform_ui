@@ -18,9 +18,9 @@ import { colors } from '@/context/constant';
 import Color from '../Color';
 import { useEffect, useMemo, useState } from 'react';
 import { ProductRequest } from '@/types/dto';
-import { useSize } from '@/hooks/useSize';
-import useCategory from '@/hooks/useCategory';
-import { useManageProduct } from '@/hooks/useManageProduct';
+import { useSize } from '@/hooks/data/useSize';
+import useCategory from '@/hooks/data/useCategory';
+import { useManageProduct } from '@/hooks/data/useManageProduct';
 
 const { TextArea } = Input;
 const { Option } = Select;
@@ -48,7 +48,7 @@ const GeneralInfoForm = ({
   const [colorPicked, setColorPicked] = useState<string[]>([]);
   const { sizes } = useSize();
   const { categories } = useCategory();
-  const { createProduct, isLoading } = useManageProduct();
+  const { createProduct, isCreating } = useManageProduct();
 
   //Update product when form values change
   useEffect(() => {
@@ -57,8 +57,8 @@ const GeneralInfoForm = ({
 
   //Update submiting state when loading state changes
   useEffect(() => {
-    setSubmiting?.(isLoading);
-  }, [isLoading]);
+    setSubmiting?.(isCreating);
+  }, [isCreating]);
 
   const hexString = useMemo<string>(
     () => (typeof colorPicking === 'string' ? colorPicking : colorPicking.toHexString()),
@@ -230,7 +230,7 @@ const GeneralInfoForm = ({
             <div className='flex'>
               <span>Selected:</span>
               <div className='flex flex-wrap gap-2 ml-2'>
-                {form.getFieldValue('hexColors') && form.getFieldValue('hexColors').map((color: string) => (
+                {[...selectedColors,...colorPicked].map((color: string) => (
                   <Color key={`selected_${color}`} color={color} />
                 ))}
               </div>
@@ -239,7 +239,7 @@ const GeneralInfoForm = ({
         </Form.Item>
 
         <Form.Item label={null} className='flex justify-end w-full'>
-          <Button type='primary' htmlType='submit' disabled={submited} loading={isLoading}>
+          <Button type='primary' htmlType='submit' disabled={submited} loading={isCreating}>
             Create
           </Button>
         </Form.Item>

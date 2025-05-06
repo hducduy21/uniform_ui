@@ -16,7 +16,7 @@ export type FilterCategory = {
 }
 
 export type ProductFilterType = {
-  search: string
+  search: string[]
   categories: string[]
   status: string[]
   priceRange: [number, number] | null

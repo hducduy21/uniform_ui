@@ -44,7 +44,7 @@ const CategoryDropdown = ({ categories, isOpen, onClose }: CategoryDropdownProps
           {categoryState && categoryState.children?.map((category, index) => (
             <Link
               key={index}
-              to={''}
+              to={`/products?categories=${category.id}`}
               className="py-1 text-gray-800 hover:text-black hover:underline"
               onClick={onClose}
             >
