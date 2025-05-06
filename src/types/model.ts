@@ -17,6 +17,7 @@ export interface ProductType {
   updatedAt: string
   createdBy: string
   lastUpdateBy: string
+  material: string
   productVariants: ProductVariantType[]
 }
 export type ProductGeneralType = Omit<
@@ -29,7 +30,6 @@ ProductType,
 | "updatedAt"
 | "createdBy"
 | "lastUpdateBy"
-| "productVariants"
 >;
 export type ProductGeneralAdminType = Omit<ProductType, 'productVariants' | 'createdBy' | 'updatedBy' | 'colors'>
 
@@ -48,7 +48,7 @@ export enum CategoryStatus{
 }
 
 export interface ProductVariantType {
-  id: string
+  id: number
   product: Partial<ProductType>
   size: string
   color: string
@@ -80,7 +80,8 @@ export interface CategoryDetailType {
   name: string
   description: string
   status: CategoryStatus
-  parent: CategoryGeneralType
+  isRoot?: boolean
+  parent?: CategoryGeneralType
   createdAt?: string
   updatedAt?: string
   createdBy?: string
@@ -88,7 +89,7 @@ export interface CategoryDetailType {
 }
 
 export type CategoryGeneralType = Pick<CategoryDetailType, 'id' | 'name'>
-export type CategoryType = Pick<CategoryDetailType, 'id' | 'name'> & {
+export type CategoryType = Pick<CategoryDetailType, 'id' | 'name' | 'parent' | 'isRoot'> & {
   children?: Pick<CategoryDetailType, 'id' | 'name'>[]
 }
 

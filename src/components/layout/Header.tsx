@@ -6,16 +6,17 @@ import CategoryDropdown from './CategoryDropdown';
 import LanguageSwitcher from './LanguageSwitcher';
 import { Heart, ShoppingBag } from 'lucide-react';
 import images from '@/assets';
-import { rootCategories } from '@/data/mock'; 
+import useTreeCategory from '@/hooks/useTreeCategories';
 
 const Header = () => {
-  const [activeTab, setActiveTab] = useState<string>('men');
+  const [activeTab, setActiveTab] = useState<number>(1);
   const [openDropdown, setOpenDropdown] = useState<boolean>(false);
   const dispatch = useDispatch();
   const location = useLocation();
+  const { categories } = useTreeCategory();
   
 
-  const handleRootCategoryClick = (categoryId: string) => {
+  const handleRootCategoryClick = (categoryId: number) => {
     if (openDropdown) {
       setOpenDropdown(false);
     } else {
@@ -32,13 +33,13 @@ const Header = () => {
       <header className={`w-full`}>
         <div className={`fixed py-1 top-0 left-0 left-1/2 z-50 h-12 w-full -translate-x-1/2 transform
                         ${!openDropdown && location.pathname == '/'  ? 'text-white' : 'text-black bg-white shadow-lg '}`}>
-          <div className='px-50 h-full flex items-center justify-between'>
+          <div className='flex items-center justify-between h-full px-50'>
             <div className='h-full'>
               <img className='block object-cover h-full' src={images.logo} alt='uniform' />
             </div>
 
             <nav className='hidden space-x-8 md:flex'>
-              {rootCategories.map((category) => (
+              {categories && categories.map((category) => (
                 <button
                   key={category.id}
                   className={`font-medium tracking-wider uppercase ${category.id === activeTab ? 'underline decoration-2 underline-offset-4' : ''}`}
@@ -60,7 +61,7 @@ const Header = () => {
             </div>
           </div>
             <CategoryDropdown
-              category={rootCategories}
+              categories={categories || []}
               isOpen={openDropdown}
               onClose={onCloseDropdown}
             />

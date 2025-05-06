@@ -1,15 +1,18 @@
 import type React from 'react';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Input from '@/components/form/Input';
 import { ErrorType } from '@/types/utils';
 import Radio from '@/components/form/Radio';
 import { EGender, User } from '@/types/model';
 import { validateEditProfileForm } from '@/utils/validate/Validate';
+import { useProfile } from '@/hooks/useProfile';
 
 export type ProfileFormData = User
 
 const Profile = () => {
+  const {user} = useProfile();
+  
   const [formData, setFormData] = useState<ProfileFormData>({
     id: '',
     email: '',
@@ -19,6 +22,11 @@ const Profile = () => {
     birthday: '',
     gender: EGender.MALE,
   });
+
+  useEffect(() => {
+    if (user) {
+      setFormData(user)
+    }}, [user]);
 
   const [errors, setErrors] = useState<ErrorType<ProfileFormData>>({});
 

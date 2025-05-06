@@ -20,6 +20,7 @@ export const api = axios.create({
   },
 });
 
+
 authApi.interceptors.request.use(
   (config) => {
     const accessToken = getAccessToken();

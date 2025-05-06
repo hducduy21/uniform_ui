@@ -4,7 +4,6 @@ import { ProductGeneralType } from '@/types/model';
 import Color from './Color';
 
 const ProductCard = ({ product }: { product: ProductGeneralType }) => {
-
   return (
     <>
       <div key={product.id} className='product-card'>
@@ -12,7 +11,7 @@ const ProductCard = ({ product }: { product: ProductGeneralType }) => {
         <div className='relative'>
           <Link to={`/product/${product.id}`} className='block'>
             <img
-              src={product.imageUrl}
+              src={`http://localhost:8080/api/products/${product.id}/image`}
               alt={product.name}
               className='object-cover w-full h-125 w-72'
             />
@@ -24,15 +23,15 @@ const ProductCard = ({ product }: { product: ProductGeneralType }) => {
 
         {/* Product colors */}
         <div className='flex flex-wrap gap-1 mt-2'>
-          {product.colors.map((color) => (
-            <Color item={color} />
+          {[...new Set(product.productVariants.map((variant) => variant.color))].map((color) => (
+            <Color key={color} color={color} />
           ))}
         </div>
 
         {/* Product details */}
         <div className='mt-2'>
           <div className='mb-1 text-xs text-gray-500'>
-            {product.category.name} <span className='ml-2'>{product.sizeType.name}</span>
+            {/* {product.category.name} <span className='ml-2'>{product.sizeType.name}</span> */}
           </div>
           <Link to={`/product/${product.id}`} className='block'>
             <h3 className='text-sm font-medium'>{product.name}</h3>

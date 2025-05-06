@@ -46,7 +46,7 @@ const ProductCreation = () => {
     },
     {
       title: 'Variants',
-      content: <VariantsForm id='8c0ce1d9-bca5-44c2-b374-2c387367489e' />,
+      content: <VariantsForm id={id || ''} />,
     },
   ];
 
@@ -82,7 +82,7 @@ const ProductCreation = () => {
                 variant='solid'
                 color='default'
                 onClick={handleNext}
-                // disabled={isSubmitting || currentSubmit == currentStep}
+                disabled={isSubmitting || currentSubmit == currentStep}
               >
                 Next
               </Button>

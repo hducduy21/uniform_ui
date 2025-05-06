@@ -1,4 +1,4 @@
-import { CategoryDetailType, EGender, ProductStatus, SizesType, User } from './model';
+import { CategoryDetailType, EGender, ProductStatus, ProductVariantType, SizesType, User } from './model';
 
 export interface Page<T> {
   content: T[];
@@ -49,6 +49,7 @@ export type ProductRequest = {
   price: number;
   sizeTypeId: number;
   hexColors?: string[];
+  categoryIds: number[];
 };
 
 export type UserFilter = {
@@ -67,3 +68,5 @@ export type QueryParams = {
   filters: Object;
   pagination?: { page: number; size: number };
 };
+
+export type ProductVariantRequest = Pick<ProductVariantType, 'id' | 'costPrice'> 

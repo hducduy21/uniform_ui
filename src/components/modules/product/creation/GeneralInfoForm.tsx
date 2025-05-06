@@ -136,18 +136,17 @@ const GeneralInfoForm = ({
 
         {/* Field product categories, price, size group and color group */}
         <Form.Item
-          name='categories'
+          name='categoryId'
           label='Categories'
           rules={[{ required: true, message: 'Please select at least one category' }]}
         >
           <Select
-            mode='multiple'
             placeholder='Select categories'
             className='w-full'
             optionFilterProp='label'
           >
             {categories &&
-              categories.map((category) => (
+              categories.filter(c => !c.isRoot).map((category) => (
                 <Option key={category.id} value={category.id} label={category.name}>
                   {category.name}
                 </Option>

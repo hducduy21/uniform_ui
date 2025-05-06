@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { JSX, useEffect } from 'react';
 import { useState } from 'react';
 import { Layout, theme, Button } from 'antd';
 import { Outlet } from 'react-router-dom';
@@ -11,7 +11,7 @@ const { Header, Sider, Content } = Layout;
 
 type HeaderItem = {
   label: string;
-  button: React.ReactNode;
+  button: JSX.Element | null;
 };
 
 const AdminLayout: React.FC = () => {
@@ -42,7 +42,7 @@ const AdminLayout: React.FC = () => {
           <img src={images.logo} className='object-cover px-2 py-1' />
         </div>
         <SideBarAdminMenu
-          setHeaderItem={(item: React.ReactNode) =>
+          setHeaderItem={(item: JSX.Element | null) =>
             setHeaderItem((prev) => ({ ...prev, button: item }))
           }
           setHeaderLabel={(label: string) =>

@@ -7,6 +7,16 @@ const productService = {
         const response = await api.get<Page<ProductType>>("/products");
         return response.data;
     },
+    getProductsByURL: async (url: string) => {
+        console.log(url);
+        const response = await api.get<Page<ProductType>>(url);
+        return response.data;
+    },
+
+    getProduct: async (id: string) => {
+        const response = await api.get<ProductType>(`/products/${id}`);
+        return response.data;
+    },
 
     getProductsByAdmin: async () => {
         const response = await authApi.get<Page<ProductType>>("/admin/products");
@@ -19,6 +29,7 @@ const productService = {
     },
 
     createProduct: async (request: ProductRequest) => {
+        console.log(request);
         const response = await authApi.post<string>("/admin/products", request);
         return response.data;
     },

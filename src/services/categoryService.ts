@@ -7,11 +7,17 @@ const categoryService = {
     return response;
   },
 
+  getTreeCategories: async () => {
+    const response = await api.get('/categories/tree').then((res) => res.data);
+    return response;
+  },
+
   getDetailCategories: async () => {
     const response = await authApi.get('/categories/detail').then((res) => res.data);
     return response;
   },
   createCategory: async (request: CategoryRequest) => {
+    console.log('request', request);
     const response = await authApi.post('/categories', request);
     return response.data;
   },

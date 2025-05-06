@@ -1,22 +1,22 @@
 import { CategoryType } from "@/types/model";
 import { useSelector } from "react-redux";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { Link } from "react-router-dom";
 
 interface CategoryDropdownProps {
-  category: CategoryType[];
+  categories: CategoryType[];
   isOpen: boolean;
   onClose: () => void;
 }
 
-const CategoryDropdown = ({ category, isOpen, onClose }: CategoryDropdownProps) => {
+const CategoryDropdown = ({ categories, isOpen, onClose }: CategoryDropdownProps) => {
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const activeCategory = useSelector((state: any) => state.category.activeCategory);
 
   const categoryState = useMemo(() => {
-    return category.find((cat) => cat.id === activeCategory) || { children: [] };
-  }, [category, activeCategory]);
+    return categories.find((cat) => cat.id === activeCategory) || { children: [] };
+  }, [categories, activeCategory]);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -37,11 +37,11 @@ const CategoryDropdown = ({ category, isOpen, onClose }: CategoryDropdownProps) 
       className={`category-dropdown fixed bot-0 left-0 w-full bg-white z-40 shadow-md ${isOpen ? "open" : " hidden"}`}
     >
       <div
-        className="container min-h-10 relative p-8 mx-auto overflow-hidden transition-all duration-500 ease-in-out"
+        className="container relative p-8 mx-auto overflow-hidden transition-all duration-500 ease-in-out min-h-10"
         style={{ height: isOpen ? "auto" : "0" }}
       >
         <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-5">
-          {categoryState.children.map((category, index) => (
+          {categoryState && categoryState.children?.map((category, index) => (
             <Link
               key={index}
               to={''}

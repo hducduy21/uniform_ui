@@ -1,34 +1,29 @@
 import type React from 'react';
 
-import { useState, useEffect, useCallback } from 'react';
-import { SlidersHorizontal, X } from 'lucide-react';
+import { useState, useCallback } from 'react';
+import { SlidersHorizontal } from 'lucide-react';
 import { FilterDropdown } from './FilterDropdown';
-import { FilterState, FilterType } from '@/types/utils';
 import { FilterButton } from './FilterButton';
+import { ProductFilterType } from '@/types/utils';
 
 interface ProductFilterProps {
-  onFilterChange: (filters: FilterState) => void;
-  initialFilters?: FilterState;
-  availableFilters: FilterType;
+  onFilterChange: (filters: ProductFilterType) => void;
+  initialFilters?: ProductFilterType;
 }
+
 const ProductFilter: React.FC<ProductFilterProps> = ({
   onFilterChange,
   initialFilters,
-  availableFilters,
 }) => {
   const [activeFilter, setActiveFilter] = useState<string | null>(null);
-  const [filters, setFilters] = useState<FilterState>(
+  const [filters, setFilters] = useState<ProductFilterType>(
     initialFilters ?? { categories: [], status: [], priceRange: null }
   );
 
   const appliedFiltersCount = filters.categories.length + filters.status.length + (filters.priceRange ? 1 : 0);
 
-  useEffect(() => {
-    onFilterChange(filters);
-  }, [filters, onFilterChange]);
-
   const toggleFilterOption = useCallback(
-    (filterType: keyof Omit<FilterState, 'priceRange'>, optionId: string) => {
+    (filterType: keyof Omit<ProductFilterType, 'priceRange'>, optionId: string) => {
       setFilters((prev) => ({
         ...prev,
         [filterType]: prev[filterType].includes(optionId)
@@ -47,28 +42,27 @@ const ProductFilter: React.FC<ProductFilterProps> = ({
     setFilters({ categories: [], status: [], priceRange: null });
   }, []);
 
-  const clearFilterType = useCallback((filterType: keyof FilterState) => {
+  const clearFilterType = useCallback((filterType: keyof ProductFilterType) => {
     setFilters((prev) => ({
       ...prev,
       [filterType]: filterType === 'priceRange' ? null : [],
     }));
   }, []);
 
-  const applyFilters = useCallback(() => {
-    setActiveFilter(null);
-  }, []);
-
+  const applyFilters = () => {
+    onFilterChange(filters);
+  }
   return (
     <div className='relative'>
       {/* Filter bar */}
-      <div className='sticky top-16 z-30 border-b bg-white'>
-        <div className='container mx-auto px-4'>
-          <div className='hide-scrollbar flex items-center overflow-x-auto py-3'>
-            <button className='relative mr-4 flex items-center'>
+      <div className='sticky z-30 bg-white border-b top-16'>
+        <div className='container px-4 mx-auto'>
+          <div className='flex items-center py-3 overflow-x-auto hide-scrollbar'>
+            <button className='relative flex items-center mr-4'>
               <SlidersHorizontal size={18} className='mr-2' />
               <span className='whitespace-nowrap'>Filters</span>
               {appliedFiltersCount > 0 && (
-                <span className='absolute -top-2 -right-2 flex h-5 w-5 items-center justify-center rounded-full bg-black text-xs text-white'>
+                <span className='absolute flex items-center justify-center w-5 h-5 text-xs text-white bg-black rounded-full -top-2 -right-2'>
                   {appliedFiltersCount}
                 </span>
               )}
@@ -80,7 +74,7 @@ const ProductFilter: React.FC<ProductFilterProps> = ({
 
             {appliedFiltersCount > 0 && (
               <button
-                className='ml-auto flex items-center text-sm whitespace-nowrap text-blue-600'
+                className='flex items-center ml-auto text-sm text-blue-600 whitespace-nowrap'
                 onClick={clearFilters}
               >
                 Clear all
@@ -94,7 +88,6 @@ const ProductFilter: React.FC<ProductFilterProps> = ({
       <FilterDropdown
         activeFilter={activeFilter}
         filters={filters}
-        availableFilters={availableFilters}
         toggleFilterOption={toggleFilterOption}
         setPriceRange={setPriceRange}
         clearFilterType={clearFilterType}
