@@ -21,45 +21,48 @@ import SizeGroupManagement from './pages/admin/SizeGroupManagement';
 import ProductDetailManagement from './pages/admin/ProductDetailManagement';
 import CustomerManagement from './pages/admin/CustomerManagement';
 import PrivateAdminRoute from './layouts/PrivateAdminRoute';
+import ErrorBoundary from './components/ErrorBounary';
 
 function App() {
   return (
-    <AuthProvider>
-      <Routes>
-        {/* Admin Routes */}
-        <Route path='admin' element={<AdminLayout />}>
-          <Route element={<PrivateAdminRoute />}>
-            <Route index path='dashboard' element={<></>} />
-            <Route path='products/creation' element={<ProductCreation />} />
-            <Route path='products/:id' element={<ProductDetailManagement />} />
-            <Route path='products' element={<ProductManagement />} />
-            <Route path='categories' element={<CategoryManagement />} />
-            <Route path='inventory' element={<InventoryManagement />} />
-            <Route path='size' element={<SizeGroupManagement />} />
-            <Route path='customers' element={<CustomerManagement />} />
-          </Route>
-        </Route>
-
-        {/* User Routes */}
-        <Route path='/' element={<Layout />}>
-          <Route index element={<Home />} />
-          <Route path='products' element={<Products />} />
-          <Route path='product/:id' element={<ProductDetail />} />
-
-          <Route element={<PrivateRoute />}>
-            <Route path='account' element={<AccountLayout />}>
-              <Route index path='profile' element={<Profile />} />
-              <Route path='change-password' element={<ChangePassword />} />
+    <ErrorBoundary>
+      <AuthProvider>
+        <Routes>
+          {/* Admin Routes */}
+          <Route path='admin' element={<AdminLayout />}>
+            <Route element={<PrivateAdminRoute />}>
+              <Route index path='dashboard' element={<></>} />
+              <Route path='products/creation' element={<ProductCreation />} />
+              <Route path='products/:id' element={<ProductDetailManagement />} />
+              <Route path='products' element={<ProductManagement />} />
+              <Route path='categories' element={<CategoryManagement />} />
+              <Route path='inventory' element={<InventoryManagement />} />
+              <Route path='size' element={<SizeGroupManagement />} />
+              <Route path='customers' element={<CustomerManagement />} />
             </Route>
-            <Route path='cart' element={<Cart />} />
-            <Route path='wishlist' element={<WishList />} />
           </Route>
 
-          <Route path='login' element={<Login />} />
-          <Route path='register' element={<Register />} />
-        </Route>
-      </Routes>
-    </AuthProvider>
+          {/* User Routes */}
+          <Route path='/' element={<Layout />}>
+            <Route index element={<Home />} />
+            <Route path='products' element={<Products />} />
+            <Route path='product/:id' element={<ProductDetail />} />
+
+            <Route element={<PrivateRoute />}>
+              <Route path='account' element={<AccountLayout />}>
+                <Route index path='profile' element={<Profile />} />
+                <Route path='change-password' element={<ChangePassword />} />
+              </Route>
+              <Route path='cart' element={<Cart />} />
+              <Route path='wishlist' element={<WishList />} />
+            </Route>
+
+            <Route path='login' element={<Login />} />
+            <Route path='register' element={<Register />} />
+          </Route>
+        </Routes>
+      </AuthProvider>
+    </ErrorBoundary>
   );
 }
 
