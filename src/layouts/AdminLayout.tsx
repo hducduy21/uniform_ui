@@ -1,11 +1,12 @@
 import React, { JSX, useEffect } from 'react';
 import { useState } from 'react';
-import { Layout, theme, Button } from 'antd';
-import { Outlet } from 'react-router-dom';
+import { Layout, theme, Button, Modal } from 'antd';
+import { Outlet, useNavigate } from 'react-router-dom';
 import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons';
 import SideBarAdminMenu from '@/components/layout/SideBarAdminMenu';
 import images from '@/assets';
 import { LogOut } from 'lucide-react';
+import { useAuthContext } from '@/context/AuthContext';
 
 const { Header, Sider, Content } = Layout;
 
@@ -17,9 +18,19 @@ type HeaderItem = {
 const AdminLayout: React.FC = () => {
   const [collapsed, setCollapsed] = useState(false);
   const [headerItem, setHeaderItem] = useState<HeaderItem>({ label: '', button: null });
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const {logout} = useAuthContext();
+  const navigate = useNavigate();
+
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
+
+  const handleLogout = async () => {
+    await logout();
+    setIsModalVisible(false);
+    navigate('/', { replace: true });
+  };
 
   return (
     <Layout className='h-screen overflow-y-auto'>
@@ -68,7 +79,7 @@ const AdminLayout: React.FC = () => {
             <div className='flex items-center gap-4'>
               {headerItem.button}
               <div className='flex items-center justify-center w-16 h-16 p-2 text-base rounded cursor-pointer hover:bg-gray-100'>
-                <LogOut />
+                <LogOut onClick={()=>{setIsModalVisible(true)}} />
               </div>
             </div>
           </div>
@@ -81,6 +92,14 @@ const AdminLayout: React.FC = () => {
           <Outlet />
         </Content>
       </Layout>
+      <Modal
+        title='Confirmation'
+        open={isModalVisible}
+        onOk={handleLogout}
+        onCancel={() => setIsModalVisible(false)}
+      >
+        <p>Are you sure you want to log out?</p>
+      </Modal>
     </Layout>
   );
 };

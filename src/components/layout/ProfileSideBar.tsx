@@ -1,11 +1,23 @@
-import { Link, useLocation } from "react-router-dom"
+import { useAuthContext } from "@/context/AuthContext"
+import { Modal } from "antd"
+import { useState } from "react"
+import { Link, useLocation, useNavigate } from "react-router-dom"
 
 const ProfileSidebar = () => {
   const location = useLocation()
   const currentPath = location.pathname
+  const [isModalVisible, setIsModalVisible] = useState(false)
+  const {logout} = useAuthContext()
+  const navigate = useNavigate()
 
   const isActive = (path: string) => {
     return currentPath.includes(path)
+  }
+
+  const handleLogout = () => {
+    logout()
+    setIsModalVisible(false)
+    navigate("/", { replace: true })
   }
 
   return (
@@ -26,8 +38,19 @@ const ProfileSidebar = () => {
               Change my password
             </Link>
           </li>
+          <li onClick={() => setIsModalVisible(true)}>
+            <span className={`text-sm cursor-pointer`}>Logout</span>
+          </li>
         </ul>
       </div>
+      <Modal
+        title='Confirmation'
+        open={isModalVisible}
+        onOk={handleLogout}
+        onCancel={() => setIsModalVisible(false)}
+      >
+        <p>Are you sure you want to log out?</p>
+      </Modal>
     </div>
   )
 }
