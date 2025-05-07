@@ -44,7 +44,7 @@ export const FilterDropdown: React.FC<FilterDropdownProps> = ({
   return (
     <div className='fixed inset-0 z-40 bg-opacity-50' onClick={() => setActiveFilter(null)}>
       <div
-        className='absolute top-[calc(4rem+1px)] right-0 left-0 z-50 bg-white p-4 shadow-lg'
+        className='absolute top-[calc(3rem)] right-0 left-0 z-50 bg-white p-4 shadow-lg'
         onClick={(e) => e.stopPropagation()}
       >
         <div className='container mx-auto'>

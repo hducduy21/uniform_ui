@@ -10,7 +10,7 @@ export function useSize() {
     error,
     isLoading,
     mutate,
-  } = useSWR<SizesType[]>('/api/size', sizeService.getSizes);
+  } = useSWR<SizesType[]>('/api/v1/size', sizeService.getSizes);
 
   const createSize = async (request: SizeRequest) => {
     try {

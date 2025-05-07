@@ -10,6 +10,7 @@ import useRating from '@/hooks/data/useRating';
 import { Modal } from 'antd';
 import { useAuthContext } from '@/context/AuthContext';
 import { toast } from 'react-toastify';
+const host = import.meta.env.VITE_BE_BASE_URL;
 
 const ProductDetail = () => {
   const { id } = useParams<{ id: string }>();
@@ -80,7 +81,7 @@ const ProductDetail = () => {
           <div className='flex flex-col items-center product-images'>
             <div className='mb-4 main-image'>
               <img
-                src={`http://localhost:8080/api/products/${product?.id}/image`}
+                src={`${host}/products/${product?.id}/image`}
                 alt={product?.name}
                 className='object-cover h-180 w-140'
               />

@@ -5,7 +5,7 @@ import { AxiosError } from 'axios';
 const sizeService = {
   getSizes: async () => {
     try {
-      const response = await api.get('/size');
+      const response = await api.get('/sizes');
       return response.data;
     } catch (error) {
       if (error instanceof AxiosError && error.response) {
@@ -19,7 +19,7 @@ const sizeService = {
 
   getSizesById: async (id: number) => {
     try {
-      const response = await api.get(`/size/${id}`);
+      const response = await api.get(`/sizes/${id}`);
       return response.data;
     } catch (error) {
       if (error instanceof AxiosError && error.response) {
@@ -33,7 +33,7 @@ const sizeService = {
 
   createSize: async (request: SizeRequest) => {
     try {
-      const response = await authApi.post('/size', request);
+      const response = await authApi.post('/sizes', request);
       return response.data;
     } catch (error) {
       if (error instanceof AxiosError && error.response) {
@@ -47,7 +47,7 @@ const sizeService = {
 
   updateSize: async (id: number, request: SizeRequest) => {
     try {
-      const response = await authApi.put(`/size/${id}`, request);
+      const response = await authApi.put(`/sizes/${id}`, request);
       return response.data;
     } catch (error) {
       if (error instanceof AxiosError && error.response) {

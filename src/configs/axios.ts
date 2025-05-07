@@ -3,7 +3,7 @@ import { refreshAccessToken } from '@/services/authService';
 import { getAccessToken } from '@/utils/cookieUtil';
 
 export const authApi = axios.create({
-  baseURL: 'http://localhost:8080/api',
+  baseURL: import.meta.env.VITE_BE_BASE_URL,
   timeout: 10000,
   headers: {
     'Content-Type': 'application/json',
@@ -12,7 +12,7 @@ export const authApi = axios.create({
 });
 
 export const api = axios.create({
-  baseURL: 'http://localhost:8080/api',
+  baseURL: import.meta.env.VITE_BE_BASE_URL,
   timeout: 10000,
   headers: {
     'Content-Type': 'application/json',

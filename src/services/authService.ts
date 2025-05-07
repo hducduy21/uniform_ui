@@ -1,71 +1,65 @@
-import {api, authApi} from "@/configs/axios";
-import { AuthResponse, LoginCredentials, RegisterFormData, UserAuth } from "@/types/dto";
-import axios from "axios";
-
+import { api, authApi } from '@/configs/axios';
+import { AuthResponse, LoginCredentials, RegisterFormData, UserAuth } from '@/types/dto';
+import axios from 'axios';
 
 export const login = async (credentials: LoginCredentials): Promise<AuthResponse> => {
   try {
-    const response = await api.post<AuthResponse>("/auth/login", credentials);
+    const response = await api.post<AuthResponse>('/auth/login', credentials);
 
     const expires = new Date(Date.now() + 60 * 60 * 1000).toUTCString();
     document.cookie = `accessToken=${response.data.tokens.accessToken}; path=/; expires=${expires}; secure; samesite=strict`;
-    localStorage.setItem("refreshToken", response.data.tokens.refreshToken);
+    localStorage.setItem('refreshToken', response.data.tokens.refreshToken);
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
-      console.error("Error message:", error.response?.data.message);
+      console.error('Error message:', error.response?.data.message);
     }
-    throw new Error("Login failed. Please check your credentials.");
+    throw new Error('Login failed. Please check your credentials.');
   }
 };
 
 export const register = async (credentials: RegisterFormData): Promise<void> => {
   try {
-    await api.post<AuthResponse>("/users/register", credentials);
+    await api.post<AuthResponse>('/users/register', credentials);
   } catch (error) {
     if (axios.isAxiosError(error)) {
-      console.error("Error message:", error.response?.data.message);
+      console.error('Error message:', error.response?.data.message);
     }
-    throw new Error("Registration failed. Please try again.");
+    throw new Error('Registration failed. Please try again.');
   }
 };
 
 export const refreshAccessToken = async (): Promise<string> => {
-  const refreshToken = localStorage.getItem("refreshToken");
+  const refreshToken = localStorage.getItem('refreshToken');
   if (!refreshToken) {
-    throw new Error("No refresh token available");
+    throw new Error('No refresh token available');
   }
 
   try {
-    const response = await api.post("/auth/refresh",{}, { headers: { Authorization: `Bearer ${refreshToken}` } });
+    const response = await api.post(
+      '/auth/refresh',
+      {},
+      { headers: { Authorization: `Bearer ${refreshToken}` } }
+    );
     const expires = new Date(Date.now() + 60 * 60 * 1000).toUTCString();
     document.cookie = `accessToken=${response.data.accessToken}; path=/; expires=${expires}; secure; samesite=strict`;
     return response.data.accessToken;
   } catch (error) {
-    throw new Error("Failed to refresh token.");
+    throw new Error('Failed to refresh token.');
   }
 };
 
 export const logout = async (): Promise<void> => {
-  try {
-    const refreshToken = localStorage.getItem("refreshToken");
-    if (refreshToken) {
-      await authApi.post("/auth/logout", { refreshToken });
-    }
-  } catch (error) {
-    console.error("Logout error:", error);
-    throw new Error("Logout failed.");
-  } finally {
-    document.cookie = "accessToken=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT; secure; samesite=strict";
-    localStorage.removeItem("refreshToken");
-  }
+  document.cookie =
+    'accessToken=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT; secure; samesite=strict';
+  localStorage.removeItem('refreshToken');
 };
 
 export const getCurrentUser = async (): Promise<UserAuth> => {
   try {
-    const response = await authApi.get<UserAuth>("/auth/me");
+    const response = await authApi.get<UserAuth>('/auth/me');
     return response.data;
   } catch (error) {
-    return Promise.reject("Failed to fetch user data.");
+    return Promise.reject('Failed to fetch user data.');
   }
 };

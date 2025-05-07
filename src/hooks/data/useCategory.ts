@@ -4,7 +4,7 @@ import { CategoryType } from '@/types/model';
 
 export function useCategory() {
   const { data: categories, error, isLoading } = useSWR<CategoryType[]>(
-    '/api/categories',
+    '/api/v1/categories',
     categoryService.getCategories,
     {
         revalidateOnFocus: false, 

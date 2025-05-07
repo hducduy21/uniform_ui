@@ -3,6 +3,7 @@ import { Heart, Star } from 'lucide-react';
 import { ProductGeneralType } from '@/types/model';
 import Color from './Color';
 import { formatUSD } from '@/utils/formatUtil';
+const host = import.meta.env.VITE_BE_BASE_URL;
 
 const ProductCard = ({ product }: { product: ProductGeneralType }) => {
   return (
@@ -12,7 +13,7 @@ const ProductCard = ({ product }: { product: ProductGeneralType }) => {
         <div className='relative'>
           <Link to={`/product/${product.id}`} className='block'>
             <img
-              src={`http://localhost:8080/api/products/${product.id}/image`}
+              src={`${host}/products/${product.id}/image`}
               alt={product.name}
               className='object-cover w-full h-125 w-72'
             />

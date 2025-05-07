@@ -9,7 +9,7 @@ export function useManageCategory() {
     error,
     isLoading,
     mutate,
-  } = useSWR<CategoryDetailType[]>('/api/categories/detail', categoryService.getDetailCategories);
+  } = useSWR<CategoryDetailType[]>('/api/v1/categories/detail', categoryService.getDetailCategories);
 
   const createCategory = async (request: CategoryRequest) => {
     try {
