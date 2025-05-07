@@ -29,7 +29,6 @@ const useManageUser = ({
       const newQuery = getQueryString({ filters, pagination });
       setQuery(newQuery);
       await mutate();
-      toast.success('Filters updated successfully');
     } catch (error) {
       toast.error('Failed to update filters');
     }

@@ -7,17 +7,18 @@ export interface ProductType {
   description: string
   status: ProductStatus
   sizeType: SizesType
-  rating: number
-  totalRates: number
   colors: ColorType[]
   views: number
   imageUrl: string
-  ratingCount: number
   createdAt: string
   updatedAt: string
   createdBy: string
   lastUpdateBy: string
   material: string
+  ratingCounter?: {
+    averageRating: number
+    totalReviews: number
+  }
   productVariants: ProductVariantType[]
 }
 export type ProductGeneralType = Omit<

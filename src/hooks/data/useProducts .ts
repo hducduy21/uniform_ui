@@ -30,7 +30,6 @@ export const useProducts = ({
       const newQuery = convertProductFilterToUrlParams(filters as ProductFilterType, pagination);
       setQuery(newQuery);
       await mutate();
-      toast.success('Filters updated successfully');
     } catch (error) {
       toast.error('Failed to update filters');
     }

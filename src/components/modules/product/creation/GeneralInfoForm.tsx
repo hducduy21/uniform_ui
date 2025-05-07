@@ -48,7 +48,7 @@ const GeneralInfoForm = ({
   const [colorPicked, setColorPicked] = useState<string[]>([]);
   const { sizes } = useSize();
   const { categories } = useCategory();
-  const { createProduct, isCreating } = useManageProduct();
+  const { createProduct, isCreating } = useManageProduct({});
 
   //Update product when form values change
   useEffect(() => {
@@ -69,7 +69,6 @@ const GeneralInfoForm = ({
     const idCreated = await createProduct(form.getFieldsValue());
     setId?.(idCreated);
     setSubmited?.();
-    console.log('Created product with id:', idCreated);
   };
 
   return (

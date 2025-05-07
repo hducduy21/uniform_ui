@@ -1,17 +1,29 @@
-import { useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Heart, Minus, Plus } from 'lucide-react';
-import { useGetProduct } from '@/hooks/useGetProduct';
+import { useGetProduct } from '@/hooks/data/useGetProduct';
 import Color from '@/components/modules/product/Color';
+import StarRating from '@/components/StarRating';
+import { ProductVariantType } from '@/types/model';
+import { formatUSD } from '@/utils/formatUtil';
+import useRating from '@/hooks/data/useRating';
+import { Modal } from 'antd';
+import { useAuthContext } from '@/context/AuthContext';
+import { toast } from 'react-toastify';
 
 const ProductDetail = () => {
   const { id } = useParams<{ id: string }>();
-  const [selectedSize, setSelectedSize] = useState('M');
+  const [selectedSize, setSelectedSize] = useState('');
+  const [selectedColor, setSelectedColor] = useState<string | null>(null);
+  const [selectedVariant, setSelectedVariant] = useState<ProductVariantType | null>(null);
   const [quantity, setQuantity] = useState(1);
   const { product } = useGetProduct(id as string);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const { myRating, rateProduct, mutate } = useRating(id as string);
+  const { isAuthenticated } = useAuthContext();
 
-  // const images = new Set([product.imageUrl, ...(product.productVariants.map((item) => item.imageUrl) || [])])
-  // const [activeImage, setActiveImage] = useState<string>(product.imageUrl)
+  // Get user's rating value if the user is authenticated
+  const [rating, setRating] = useState(0);
 
   const decreaseQuantity = () => {
     if (quantity > 1) {
@@ -22,6 +34,44 @@ const ProductDetail = () => {
   const increaseQuantity = () => {
     setQuantity(quantity + 1);
   };
+
+  const handleRatingChange = async (newRating: number) => {
+    if (isAuthenticated()) {
+      setRating(newRating);
+      setIsModalVisible(true);
+    } else {
+      toast.error('Please login to rate this product');
+    }
+  };
+
+  const handleRating = async () => {
+    rateProduct({ productId: id as string, rating: rating });
+    mutate();
+    setIsModalVisible(false);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalVisible(false);
+  };
+
+  const uniqueColors = useMemo(() => {
+    return [...new Set(product?.productVariants.map((variant) => variant.color))];
+  }, [product?.productVariants]);
+
+  useEffect(() => {
+    if (myRating) {
+      setRating(myRating);
+    }
+  }, [myRating]);
+
+  useEffect(() => {
+    if (selectedSize && selectedColor) {
+      const variant = product?.productVariants.find(
+        (variant) => variant.size === selectedSize && variant.color === selectedColor
+      );
+      setSelectedVariant(variant || null);
+    }
+  }, [selectedSize, selectedColor]);
 
   return (
     <div className='pt-16 pb-24 bg-white'>
@@ -54,11 +104,14 @@ const ProductDetail = () => {
                 <span className='mr-2 text-sm text-gray-500'>Color:</span>
               </div>
               <div className='flex flex-wrap gap-2'>
-                {[...new Set(product?.productVariants.map((variant) => variant.color))].map(
-                  (color) => (
-                    <Color key={color} color={color} />
-                  )
-                )}
+                {uniqueColors.map((color) => (
+                  <Color
+                    key={color}
+                    checked={selectedColor ? selectedColor == color : false}
+                    color={color}
+                    onClick={() => setSelectedColor(color)}
+                  />
+                ))}
               </div>
             </div>
 
@@ -88,36 +141,53 @@ const ProductDetail = () => {
 
             {/* Price */}
             <div className='mt-6'>
-              <div className='text-xl font-medium'>{product?.price}</div>
+              <div className='text-xl font-medium'>
+                {selectedVariant
+                  ? formatUSD(selectedVariant.costPrice)
+                  : formatUSD(product?.price || 0)}
+              </div>
               <div className='mt-1 text-sm text-gray-500'>{product?.description}</div>
               <div className='flex items-center mt-1'>
                 <div className='flex items-center'>
                   <span className='mr-1 text-sm'>★</span>
-                  <span className='text-sm'>{product?.rating}</span>
+                  <span className='text-sm'>{product?.ratingCounter?.averageRating || 0}</span>
                 </div>
-                <span className='ml-1 text-sm text-gray-500'>({product?.ratingCount}+)</span>
+                <span className='ml-1 text-sm text-gray-500'>
+                  ({product?.ratingCounter?.totalReviews || 0}+)
+                </span>
               </div>
             </div>
 
             {/* Quantity */}
-            <div className='mt-6'>
-              <div className='flex max-w-[150px] items-center border border-gray-300'>
-                <button
-                  className='flex items-center justify-center flex-1 px-4 py-2 border-r border-gray-300'
-                  onClick={decreaseQuantity}
-                >
-                  <Minus size={16} />
-                </button>
-                <button className='flex items-center justify-center flex-1 px-4 py-2 border-gray-300'>
-                  {quantity}
-                </button>
-                <button
-                  className='flex items-center justify-center flex-1 px-4 py-2 border-l border-gray-300'
-                  onClick={increaseQuantity}
-                >
-                  <Plus size={16} />
-                </button>
+            <div className='flex items-end justify-between mt-6'>
+              <div>
+                <div className='flex max-w-[150px] items-center border border-gray-300'>
+                  <button
+                    className='flex items-center justify-center flex-1 px-4 py-2 border-r border-gray-300'
+                    onClick={decreaseQuantity}
+                  >
+                    <Minus size={16} />
+                  </button>
+                  <button className='flex items-center justify-center flex-1 px-4 py-2 border-gray-300'>
+                    {quantity}
+                  </button>
+                  <button
+                    className='flex items-center justify-center flex-1 px-4 py-2 border-l border-gray-300'
+                    onClick={increaseQuantity}
+                  >
+                    <Plus size={16} />
+                  </button>
+                </div>
+                <span>Quantity in stock: {selectedVariant?.quantityInStock || 0}</span>
               </div>
+
+              <StarRating
+                rating={rating}
+                size={20}
+                interactive={true}
+                onRatingChange={handleRatingChange}
+                userRating={rating}
+              />
             </div>
 
             {/* Add to Cart Button */}
@@ -127,6 +197,15 @@ const ProductDetail = () => {
           </div>
         </div>
       </div>
+
+      <Modal
+        title='Confirmation'
+        open={isModalVisible}
+        onOk={handleRating}
+        onCancel={handleCloseModal}
+      >
+        Are you sure you want to rate this product {rating} stars?
+      </Modal>
     </div>
   );
 };

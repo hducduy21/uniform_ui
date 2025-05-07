@@ -8,6 +8,7 @@ interface AuthContextType {
   login: (credentials: LoginCredentials) => Promise<void>;
   register: (userData: RegisterFormData) => Promise<void>;
   logout: () => Promise<void>;
+  isAuthenticated: () => boolean;
 }
 
 export const AuthContext = createContext<AuthContextType>({
@@ -17,6 +18,7 @@ export const AuthContext = createContext<AuthContextType>({
   login: async () => {},
   register: async () => {},
   logout: async () => {},
+  isAuthenticated: () => false,
 });
 
 interface AuthService {
@@ -106,6 +108,10 @@ export const AuthProvider: React.FC<{
     }
   }, [authServiceOverride]);
 
+  const isAuthenticated = useCallback(() => {
+    return !!user;
+  }, [user]);
+
   const contextValue = useMemo(
     () => ({
       user,
@@ -114,8 +120,9 @@ export const AuthProvider: React.FC<{
       login,
       register,
       logout,
+      isAuthenticated
     }),
-    [user, isLoading, error, login, register, logout]
+    [user, isLoading, error, login, register, logout, isAuthenticated]
   );
 
   return <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>;

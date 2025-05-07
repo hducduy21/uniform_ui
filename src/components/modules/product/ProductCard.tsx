@@ -44,9 +44,9 @@ const ProductCard = ({ product }: { product: ProductGeneralType }) => {
               <span className='mr-1 text-xs'>
                 <Star fill='black' className='w-4 h-4' />
               </span>
-              <span className='text-xs'>{product.rating}</span>
+              <span className='text-xs'>{product.ratingCounter?.averageRating || 0}</span>
             </div>
-            <span className='ml-1 text-xs text-gray-500'>({product.rating})</span>
+            <span className='ml-1 text-xs text-gray-500'>({product.ratingCounter?.totalReviews || 0})</span>
           </div>
         </div>
       </div>

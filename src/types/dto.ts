@@ -70,3 +70,8 @@ export type QueryParams = {
 };
 
 export type ProductVariantRequest = Pick<ProductVariantType, 'id' | 'costPrice'> 
+
+export type BulkProductStatusUpdateRequest = {
+  status: ProductStatus;
+  productIds: string[];
+}

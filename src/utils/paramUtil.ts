@@ -1,5 +1,5 @@
 import { PagingParams, QueryParams } from "@/types/dto";
-import { ProductFilterType } from "@/types/utils";
+import { FilterType, ProductFilterType } from "@/types/utils";
 
 export const toStringRecord = (filters: Object): Record<string, string> =>
   Object.entries(filters).reduce<Record<string, string>>((acc, [key, value]) => {
@@ -41,6 +41,43 @@ export function convertProductFilterToUrlParams(filter: ProductFilterType, pagin
   }
 
   params.append('page', (pagination.page-1).toString());
+  params.append('size', pagination.size.toString());
+
+  return params.toString();
+}
+
+export function convertFilterToUrlParams(filter: FilterType, pagination: PagingParams = { page: 1, size: 10 }): string {
+  const params = new URLSearchParams();
+
+  if (filter.category) {
+    params.append('categories', filter.category);
+  }
+
+  if (filter.status) {
+    params.append('status', filter.status);
+  }
+
+  if (filter.minPrice) {
+    params.append('minPrice', filter.minPrice);
+  }
+
+  if (filter.maxPrice) {
+    params.append('maxPrice', filter.maxPrice);
+  }
+
+  if (filter.search) {
+    params.append('search', filter.search);
+  }
+
+  if (filter.sortBy) {
+    params.append('sort', filter.sortBy);
+  }
+
+  if (filter.direction) {
+    params.append('direction', filter.direction);
+  }
+
+  params.append('page', (pagination.page - 1).toString());
   params.append('size', pagination.size.toString());
 
   return params.toString();

@@ -131,27 +131,27 @@ export const mockCategories: CategoryDetailType[] = [
 export const mockSizeGroups: SizesType[] = [
   {
     id: 1,
-    sizeTitle: 'Adult Standard',
+    sizetype: 'Adult Standard',
     elements: ['XS', 'S', 'M', 'L', 'XL', 'XXL'],
   },
   {
     id: 2,
-    sizeTitle: 'Kids',
+    sizetype: 'Kids',
     elements: ['3Y', '4Y', '5Y', '6Y', '7Y', '8Y', '9Y', '10Y'],
   },
   {
     id: 3,
-    sizeTitle: 'Shoes EU',
+    sizetype: 'Shoes EU',
     elements: ['36', '37', '38', '39', '40', '41', '42', '43', '44', '45'],
   },
   {
     id: 4,
-    sizeTitle: 'Shoes US',
+    sizetype: 'Shoes US',
     elements: ['5', '5.5', '6', '6.5', '7', '7.5', '8', '8.5', '9', '9.5', '10'],
   },
   {
     id: 5,
-    sizeTitle: 'One Size',
+    sizetype: 'One Size',
     elements: ['OS'],
   },
 ];
@@ -173,9 +173,9 @@ export const productDetailsMock: ProductType = {
   },
   description: 'A classic 100% cotton t-shirt. Soft, comfortable, and durable for daily wear.',
   status: ProductStatus.ACTIVE,
-  sizes: {
+  sizeType: {
     id: 1,
-    sizeTitle: 'Standard Sizes',
+    name: 'Standard Sizes',
     elements: ['S', 'M', 'L', 'XL'],
   },
   rating: 4.5,

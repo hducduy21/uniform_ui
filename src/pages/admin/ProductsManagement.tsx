@@ -16,6 +16,8 @@ import { SearchOutlined, ReloadOutlined, EyeOutlined } from '@ant-design/icons';
 import { ProductGeneralAdminType, ProductStatus } from '@/types/model';
 import { useManageProduct } from '@/hooks/data/useManageProduct';
 import useCategory from '@/hooks/data/useCategory';
+import { FilterType } from '@/types/utils';
+import Pagination from '@/components/Pagination';
 const { Option } = Select;
 
 const columns = [
@@ -93,45 +95,48 @@ const columns = [
   },
 ];
 
-type FilterType = {
-  category: string | undefined;
-  status: string | undefined;
-  minPrice: string | undefined;
-  maxPrice: string | undefined;
-  search: string | undefined;
-  sortBy: string | undefined;
-};
-
 const ProductManagement: React.FC = () => {
   const [form] = Form.useForm();
-  const { products } = useManageProduct()
-	console.log(products)
 
-  const [filters, setFilters] = useState({
+  const [filters, setFilters] = useState<FilterType>({
     category: undefined,
     status: undefined,
     minPrice: undefined,
     maxPrice: undefined,
     search: undefined,
     sortBy: undefined,
+    direction: undefined,
   });
+
+  const { products, isLoading, isUpdating, updateFilters, updateBulkProduct } = useManageProduct({ filters });
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
 
   const handleResetFilters = () => {
-    form.resetFields();
-    setFilters({
+    const defaultFilters: FilterType = {
       category: undefined,
       status: undefined,
       minPrice: undefined,
       maxPrice: undefined,
       search: undefined,
       sortBy: undefined,
+      direction: undefined,
+    }
+    form.setFieldsValue(defaultFilters);
+    setFilters(defaultFilters);
+    updateFilters({
+      filters: defaultFilters,
+      pagination: { page: 1, size: 10 },
     });
   };
 
   const handleBulkStatusUpdate = async (status: ProductStatus) => {
-    console.log('Bulk update status:', status);
-    console.log('Selected products:', selectedRowKeys);
+    await updateBulkProduct({status: status, productIds: selectedRowKeys as string[]});
+  };
+  
+  const applyFilters = () => {
+    setFilters(form.getFieldsValue());
+    updateFilters({ filters: form.getFieldsValue(), pagination: { page: 1, size: 10 } });
+    setSelectedRowKeys([]);
   };
 
   const rowSelection = {
@@ -141,21 +146,38 @@ const ProductManagement: React.FC = () => {
     },
   };
 
+  const handlePageChange = (page: number) => {
+    updateFilters({ filters, pagination: { page, size: 10 } });
+    selectedRowKeys[0]
+  };
+
   return (
     <div className='flex flex-col w-full h-full overflow-hidden'>
       {/* Filter Products */}
-      <Filter form={form} filters={filters} handleResetFilters={handleResetFilters} />
+      <Filter
+        form={form}
+        filters={filters}
+        applyFilters={applyFilters}
+        handleResetFilters={handleResetFilters}
+      />
 
       {/* Bulk Actions */}
       <BulkActions
         selectedRowKeys={selectedRowKeys}
         handleBulkStatusUpdate={handleBulkStatusUpdate}
         setSelectedRowKeys={setSelectedRowKeys}
-      />
+      >
+        <Pagination
+          currentPage={(products?.number && products?.number + 1) || 1}
+          totalPages={products?.totalPages || 1}
+          onPageChange={handlePageChange}
+        />
+      </BulkActions>
 
       {/* Product Table */}
       <div className='flex-1 w-full h-full overflow-hidden'>
         <Table
+          loading={isLoading || isUpdating}
           rowKey='id'
           rowSelection={rowSelection}
           columns={columns}
@@ -172,11 +194,12 @@ type FilterProps = {
   form: FormInstance;
   filters: FilterType;
   handleResetFilters: () => void;
+  applyFilters: () => void;
 };
 
-const Filter = ({ form, filters, handleResetFilters }: FilterProps) => {
-	const {categories} = useCategory()
-	
+const Filter = ({ form, filters, handleResetFilters, applyFilters }: FilterProps) => {
+  const { categories } = useCategory();
+
   return (
     <Form
       form={form}
@@ -184,21 +207,22 @@ const Filter = ({ form, filters, handleResetFilters }: FilterProps) => {
       layout='vertical'
       initialValues={filters}
     >
-      <Form.Item className='flex-1' name='search'>
+      <Form.Item className='flex-2' name='search'>
         <Input placeholder='Enter product name' />
       </Form.Item>
 
-      <Form.Item className='flex-1' name='category'>
+      <Form.Item className='flex-2' name='category'>
         <Select placeholder='Select category' allowClear>
-          {categories && categories.map((category) => (
-            <Option key={category.id} value={category.id}>
-              {category.name}
-            </Option>
-          ))}
+          {categories &&
+            categories.map((category) => (
+              <Option key={category.id} value={category.id}>
+                {category.name}
+              </Option>
+            ))}
         </Select>
       </Form.Item>
 
-      <Form.Item className='flex-1' name='status'>
+      <Form.Item className='flex-2' name='status'>
         <Select placeholder='Select status' allowClear>
           {Object.values(ProductStatus).map((status) => (
             <Option key={status} value={status}>
@@ -208,11 +232,11 @@ const Filter = ({ form, filters, handleResetFilters }: FilterProps) => {
         </Select>
       </Form.Item>
 
-      <Form.Item className='flex-1' name='minPrice'>
+      <Form.Item className='flex-2' name='minPrice'>
         <InputNumber style={{ width: '100%' }} placeholder='Min' min={0} />
       </Form.Item>
 
-      <Form.Item className='flex-1' name='maxPrice'>
+      <Form.Item className='flex-2' name='maxPrice'>
         <InputNumber style={{ width: '100%' }} placeholder='Max' min={0} />
       </Form.Item>
 
@@ -227,12 +251,18 @@ const Filter = ({ form, filters, handleResetFilters }: FilterProps) => {
             ))}
         </Select>
       </Form.Item>
+      <Form.Item className='flex-1' name='direction'>
+        <Select placeholder='Direction' allowClear>
+              <Option value={"ASC"}>Ascending</Option>
+              <Option value={"DESC"}>Descending</Option>
+        </Select>
+      </Form.Item>
 
       <Button icon={<ReloadOutlined />} onClick={handleResetFilters}>
         Reset
       </Button>
 
-      <Button type='primary' icon={<SearchOutlined />} htmlType='submit'>
+      <Button type='primary' onClick={applyFilters} icon={<SearchOutlined />} htmlType='submit'>
         Search
       </Button>
     </Form>
@@ -243,16 +273,18 @@ const BulkActions = ({
   selectedRowKeys,
   handleBulkStatusUpdate,
   setSelectedRowKeys,
+  children,
 }: {
   selectedRowKeys: React.Key[];
   handleBulkStatusUpdate: (value: ProductStatus) => void;
   setSelectedRowKeys: (value: React.Key[]) => void;
+  children?: React.ReactNode;
 }) => {
   return (
-    <div className='mb-4 rounded bg-[#f0f7ff] px-2 py-4'>
-      <Space className='flex flex-row items-center justify-between w-full'>
-        <div>Selected {selectedRowKeys.length} items:</div>
+    <div className='px-2 py-0 mb-4 rounded'>
+      <Space className='flex flex-row items-center justify-between w-full h-10'>
         <div className='flex gap-3'>
+          <div>Selected {selectedRowKeys.length} items:</div>
           <Button
             type='primary'
             disabled={selectedRowKeys.length == 0}
@@ -285,6 +317,7 @@ const BulkActions = ({
             Clear Selection
           </Button>
         </div>
+        {children}
       </Space>
     </div>
   );

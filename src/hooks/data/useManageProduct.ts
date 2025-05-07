@@ -1,17 +1,29 @@
 import productService from '@/services/productService';
-import { Page, ProductRequest } from '@/types/dto';
+import { BulkProductStatusUpdateRequest, Page, PagingParams, ProductRequest, QueryParams } from '@/types/dto';
 import { ProductType } from '@/types/model';
+import { FilterType } from '@/types/utils';
+import { convertFilterToUrlParams } from '@/utils/paramUtil';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 import useSWR from 'swr';
 
-export function useManageProduct() {
+export const useManageProduct = ({
+  filters,
+  pagination = { page: 1, size: 10 },
+}: {
+  filters?: FilterType;
+  pagination?: PagingParams;
+})  => {
+  const [query, setQuery] = useState<string>(() => {
+    return convertFilterToUrlParams(filters as FilterType, pagination);
+  });
+
   const {
     data: products,
     error,
     isLoading,
     mutate,
-  } = useSWR<Page<ProductType>>('/api/products', productService.getProductsByAdmin);
+  } = useSWR<Page<ProductType>>(`/admin/products${'?' + query}`, productService.getProductsByAdmin);
 
   const getProductDetail = async (id: string) => {
     try {
@@ -21,6 +33,16 @@ export function useManageProduct() {
       throw error;
     }
   };
+
+  const updateFilters = async ({ filters, pagination = { page: 1, size: 8 } }: QueryParams) => {
+      try {
+        const newQuery = convertFilterToUrlParams(filters as FilterType, pagination);
+        setQuery(newQuery);
+        await mutate();
+      } catch (error) {
+        toast.error('Failed to update filters');
+      }
+    };
 
   const [isCreating, setIsCreating] = useState(false);
   const createProduct = async (request: ProductRequest) => {
@@ -53,14 +75,33 @@ export function useManageProduct() {
     }
   };
 
+  const [isUpdating, setIsUpdating] = useState(false);
+  const updateBulkProduct = async (bulk: BulkProductStatusUpdateRequest) => {
+    setIsUpdating(true);
+    try {
+      await productService.updateBulkStatus(bulk);
+      toast.success('Update product successfully');
+      mutate();
+    } catch (error: any) {
+      toast.error(error.message);
+      mutate(products, false);
+      throw error;
+    } finally {
+      setIsUpdating(false);
+    }
+  }
+
   return {
     products,
     isLoading,
     isCreating,
     isUploading,
+    isUpdating,
     error,
     createProduct,
     uploadProductImage,
     getProductDetail,
+    updateFilters,
+    updateBulkProduct,
   };
 }

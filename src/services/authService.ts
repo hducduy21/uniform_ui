@@ -1,6 +1,5 @@
 import {api, authApi} from "@/configs/axios";
 import { AuthResponse, LoginCredentials, RegisterFormData, UserAuth } from "@/types/dto";
-import { getAccessToken } from "@/utils/cookieUtil";
 import axios from "axios";
 
 
@@ -17,8 +16,6 @@ export const login = async (credentials: LoginCredentials): Promise<AuthResponse
       console.error("Error message:", error.response?.data.message);
     }
     throw new Error("Login failed. Please check your credentials.");
-  }finally {
-    console.log("Login response:", getAccessToken());
   }
 };
 

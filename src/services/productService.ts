@@ -1,5 +1,5 @@
 import { api, authApi } from '@/configs/axios';
-import { Page, ProductRequest } from '@/types/dto';
+import { BulkProductStatusUpdateRequest, Page, ProductRequest } from '@/types/dto';
 import { ProductType } from '@/types/model';
 import { AxiosError } from 'axios';
 
@@ -20,7 +20,6 @@ const productService = {
 
   getProductsByURL: async (url: string) => {
     try {
-      console.log(url);
       const response = await api.get<Page<ProductType>>(url);
       return response.data;
     } catch (error) {
@@ -49,9 +48,9 @@ const productService = {
     }
   },
 
-  getProductsByAdmin: async () => {
+  getProductsByAdmin: async (url: string) => {
     try {
-      const response = await authApi.get<Page<ProductType>>('/admin/products');
+      const response = await authApi.get<Page<ProductType>>(url);
       return response.data;
     } catch (error) {
       if (error instanceof AxiosError && error.response) {
@@ -116,6 +115,21 @@ const productService = {
       throw new Error('Upload product image failed, please try again');
     }
   },
+
+  updateBulkStatus: async (request: BulkProductStatusUpdateRequest) =>{
+    try {
+      const response = await authApi.patch<string>('/admin/products/status', request);
+      return response.data;
+    } catch (error) {
+      if (error instanceof AxiosError && error.response) {
+        throw new Error(
+          error.response.data.data?.[0] || error.response.data.message || 'Update product status failed'
+        );
+      }
+      throw new Error('Update product status failed, please try again');
+    }
+
+  }
 };
 
 export default productService;

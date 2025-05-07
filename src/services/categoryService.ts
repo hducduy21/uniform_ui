@@ -47,7 +47,6 @@ const categoryService = {
 
   createCategory: async (request: CategoryRequest) => {
     try {
-      console.log('request', request);
       const response = await authApi.post('/categories', request);
       return response.data;
     } catch (error) {

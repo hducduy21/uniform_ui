@@ -4,7 +4,7 @@ import { CategoryType } from '@/types/model';
 
 export function useTreeCategory() {
   const { data: categories, error, isLoading } = useSWR<CategoryType[]>(
-    '/api/categories/trew',
+    '/api/categories/tree',
     categoryService.getTreeCategories,
   );
 

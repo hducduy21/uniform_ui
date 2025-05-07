@@ -18,7 +18,7 @@ const ImageUploadForm = ({
   setUploaded: () => void;
 }) => {
   const [file, setFile] = useState<File | null>(null);
-  const { uploadProductImage, isUploading } = useManageProduct();
+  const { uploadProductImage, isUploading } = useManageProduct({});
 
   const handleUpload = async () => {
     if (!file || !id) return;
