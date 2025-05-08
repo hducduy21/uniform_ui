@@ -1,3 +1,4 @@
+import { VariantPriceRequest } from '@/components/modules/product/creation/VariantForm';
 import variantsService from '@/services/variantsService';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
@@ -12,7 +13,7 @@ const useVariant = (productId: string) => {
   const [isUpdating, setIsUpdating] = useState(false);
   const updateVariant = async (
     productId: string,
-    productVariantsCostPriceMap: Map<number, number>
+    productVariantsCostPriceMap: VariantPriceRequest[]
   ) => {
     setIsUpdating(true);
     try {

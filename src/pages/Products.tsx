@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import ProductCard from '@/components/modules/product/ProductCard';
 import { ProductFilterType } from '@/types/utils';
 import { useProducts } from '@/hooks/data/useProducts ';
@@ -29,6 +29,19 @@ const Products = () => {
   const handlePageChange = (page: number) => {
     updateFilters({ filters, pagination: { page, size: 8 } });
   };
+
+  useEffect(() => {
+    updateFilters({
+      filters: {
+        ...filters,
+        search: [searchParams.get('search') || ''],
+        categories: searchParams.get('categories')?.split(',') || [],
+      },
+      pagination: { page: parseInt(searchParams.get('page') || '') || 1, size: 8 },
+    });
+  }
+  , [searchParams]);
+  
 
   return (
     <div className='pt-16 pb-24 bg-white'>

@@ -1,12 +1,13 @@
 import { api, authApi } from '@/configs/axios';
 import { AuthResponse, LoginCredentials, RegisterFormData, UserAuth } from '@/types/dto';
 import axios from 'axios';
+import { toast } from 'react-toastify';
 
 export const login = async (credentials: LoginCredentials): Promise<AuthResponse> => {
   try {
     const response = await api.post<AuthResponse>('/auth/login', credentials);
 
-    const expires = new Date(Date.now() + 60 * 60 * 1000).toUTCString();
+    const expires = new Date(Date.now() + 3 * 60 * 60 * 1000).toUTCString();
     document.cookie = `accessToken=${response.data.tokens.accessToken}; path=/; expires=${expires}; secure; samesite=strict`;
     localStorage.setItem('refreshToken', response.data.tokens.refreshToken);
     return response.data;
@@ -21,8 +22,10 @@ export const login = async (credentials: LoginCredentials): Promise<AuthResponse
 export const register = async (credentials: RegisterFormData): Promise<void> => {
   try {
     await api.post<AuthResponse>('/users/register', credentials);
+    toast.success('Registration successful! Please check your email to verify your account.');
   } catch (error) {
     if (axios.isAxiosError(error)) {
+      toast.error(error?.response?.data[0] || error?.response?.data || 'Registration failed. Please try again.');
       console.error('Error message:', error.response?.data.message);
     }
     throw new Error('Registration failed. Please try again.');

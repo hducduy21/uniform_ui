@@ -61,6 +61,23 @@ export const useManageProduct = ({
     }
   };
 
+  const [isUpdating, setIsUpdating] = useState(false);
+  const updateProduct = async (idproduct: string,request: ProductRequest) => {
+    setIsCreating(true);
+    try {
+      const id: string = await productService.updateProduct(idproduct,request);
+      toast.success('Create product successfully');
+      mutate();
+      return id;
+    } catch (error: any) {
+      toast.error(error.message);
+      mutate(products, false);
+      throw error;
+    } finally {
+      setIsCreating(false);
+    }
+  };
+
   const [isUploading, setIsUploading] = useState(false);
   const uploadProductImage = async (id: string, file: File) => {
     setIsUploading(true);
@@ -75,7 +92,6 @@ export const useManageProduct = ({
     }
   };
 
-  const [isUpdating, setIsUpdating] = useState(false);
   const updateBulkProduct = async (bulk: BulkProductStatusUpdateRequest) => {
     setIsUpdating(true);
     try {
@@ -99,6 +115,7 @@ export const useManageProduct = ({
     isUpdating,
     error,
     createProduct,
+    updateProduct,
     uploadProductImage,
     getProductDetail,
     updateFilters,

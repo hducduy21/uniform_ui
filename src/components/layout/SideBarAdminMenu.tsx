@@ -41,12 +41,6 @@ const menuItems = [
     headerLabel: 'Customers Management',
   },
   {
-    key: '/admin/inventory',
-    icon: <InboxOutlined />,
-    label: 'Inventory',
-    headerLabel: 'Inventory Management',
-  },
-  {
     key: '/admin/size',
     icon: <Ruler size={16} />,
     label: 'Size Groups',

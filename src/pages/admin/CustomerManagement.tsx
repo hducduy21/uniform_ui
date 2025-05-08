@@ -1,6 +1,6 @@
 import type React from 'react';
 import { useEffect, useState } from 'react';
-import { Table, Button, Space, Tag, Form, Select, Input, FormInstance } from 'antd';
+import { Table, Button, Space, Tag, Form, Select, Input, FormInstance, Modal } from 'antd';
 import { SearchOutlined, ReloadOutlined } from '@ant-design/icons';
 import useManageUser from '@/hooks/data/useManageUser';
 import { UserFilter } from '@/types/dto';
@@ -20,6 +20,18 @@ const CustomerManagement: React.FC = () => {
     enabled: undefined,
   });
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
+  const [user, setUser] = useState<UserDetailType | null>(null);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [type, setType] = useState<'lock' | 'unlock'>('lock');
+
+  const handleSetLockUser = async () => {
+    if (type === 'lock') {
+      await lockUser(user?.id as string);
+    } else {
+      await unlockUser(user?.id as string);
+    }
+    setIsModalVisible(false);
+  };
 
   const handleResetFilters = () => {
 		const emptyFilters: UserFilter = {
@@ -132,7 +144,9 @@ const CustomerManagement: React.FC = () => {
               color='red'
               className='text-small'
               onClick={() => {
-                unlockUser(record.id);
+                setUser(record);
+                setType('unlock');
+                setIsModalVisible(true);
               }}
             >
               Unlock
@@ -143,7 +157,9 @@ const CustomerManagement: React.FC = () => {
               color='red'
               className='text-small'
               onClick={() => {
-                lockUser(record.id);
+                setUser(record);
+                setType('lock');
+                setIsModalVisible(true);
               }}
             >
               Lock
@@ -179,6 +195,16 @@ const CustomerManagement: React.FC = () => {
           loading={isLoading}
         />
       </div>
+
+
+      <Modal
+        title='Confirmation'
+        open={isModalVisible}
+        onOk={handleSetLockUser}
+        onCancel={() => setIsModalVisible(false)}
+      >
+        <p>Are you sure to lock user {user?.firstName + " " + user?.lastName}?</p>
+      </Modal>
     </div>
   );
 };

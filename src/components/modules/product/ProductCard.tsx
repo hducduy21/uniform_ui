@@ -11,7 +11,7 @@ const ProductCard = ({ product }: { product: ProductGeneralType }) => {
       <div key={product.id} className='product-card'>
         {/* Product image */}
         <div className='relative'>
-          <Link to={`/product/${product.id}`} className='block'>
+          <Link to={`/products/${product.id}`} className='block'>
             <img
               src={`${host}/products/${product.id}/image`}
               alt={product.name}
@@ -35,7 +35,7 @@ const ProductCard = ({ product }: { product: ProductGeneralType }) => {
           <div className='mb-1 text-xs text-gray-500'>
             {/* {product.category.name} <span className='ml-2'>{product.sizeType.name}</span> */}
           </div>
-          <Link to={`/product/${product.id}`} className='block'>
+          <Link to={`/products/${product.id}`} className='block'>
             <h3 className='text-sm font-medium'>{product.name}</h3>
           </Link>
           <div className='mt-1 text-sm font-medium'>{formatUSD(product.price)}</div>

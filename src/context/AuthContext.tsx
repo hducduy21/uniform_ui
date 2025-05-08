@@ -1,6 +1,7 @@
 import React, { createContext, useState, useEffect, useCallback, useMemo } from "react";
 import * as authService from "@/services/authService";
 import { AuthResponse, LoginCredentials, RegisterFormData, UserAuth } from "@/types/dto";
+import { toast } from "react-toastify";
 interface AuthContextType {
   user: UserAuth | null;
   isLoading: boolean;
@@ -61,11 +62,11 @@ export const AuthProvider: React.FC<{
       try {
         setIsLoading(true);
         setError(null);
-
         const response = await authServiceOverride.login(credentials);
         setUser(response.user);
+        toast.info("Welcome back!");
       } catch (err) {
-
+        toast.error("Login failed. Please check your credentials.");
         setError("Login failed. Please check your credentials.");
         throw err;
       } finally {
@@ -80,10 +81,10 @@ export const AuthProvider: React.FC<{
       try {
         setIsLoading(true);
         setError(null);
-
         await authServiceOverride.register(userData);
+        toast.success("Registration successful! Please log in.");
       } catch (err) {
-
+        toast.error("Registration failed. Please try again.");
         setError("Registration failed. Please try again.");
         throw err;
       } finally {
@@ -97,10 +98,11 @@ export const AuthProvider: React.FC<{
     try {
       setIsLoading(true);
       setError(null);
-
       await authServiceOverride.logout();
       setUser(null);
+      toast.info("Logged out successfully, see you next time!");
     } catch (err) {
+      toast.error("Logout failed. Please try again.");
       setError("Logout failed. Please try again.");
       throw err;
     } finally {

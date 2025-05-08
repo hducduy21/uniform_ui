@@ -5,8 +5,6 @@ import GeneralInfoForm from '@/components/modules/product/creation/GeneralInfoFo
 import ImageUploadForm from '@/components/modules/product/creation/ImageUploadForm';
 import VariantsForm from '@/components/modules/product/creation/VariantForm';
 import { ProductRequest } from '@/types/dto';
-import { useNavigate } from 'react-router-dom';
-
 const { Title } = Typography;
 
 const ProductCreation = () => {
@@ -22,6 +20,7 @@ const ProductCreation = () => {
       title: 'General Information',
       content: (
         <GeneralInfoForm
+          type='create'
           form={form}
           submited={currentSubmit > currentStep}
           setSubmiting={setSubmitting}

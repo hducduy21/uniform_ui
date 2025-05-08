@@ -6,6 +6,7 @@ import { useParams } from 'react-router-dom';
 import { useEffect } from 'react';
 import useGetProductDetail from '@/hooks/data/useGetProductDetail';
 import { ProductRequest } from '@/types/dto';
+import ImageUploadForm from '@/components/modules/product/creation/ImageUploadForm';
 
 const ProductDetailManagement = () => {
   const { id } = useParams<{ id: string }>();
@@ -29,12 +30,17 @@ const ProductDetailManagement = () => {
           {
             label: 'General Information',
             key: 'general',
-            children: <GeneralInfoForm form={form}></GeneralInfoForm>,
+            children: <GeneralInfoForm id={id || ''} type='update' form={form}></GeneralInfoForm>,
           },
           {
             label: 'Variants',
             key: 'variants',
             children: <VariantsForm id={product?.id || ''} />,
+          },
+          {
+            label: 'Image',
+            key: 'image',
+            children: <ImageUploadForm id={id || ""} ></ImageUploadForm>,
           },
           {
             label: 'Preview',

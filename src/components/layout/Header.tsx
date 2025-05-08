@@ -3,8 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { setActiveCategory } from '../../store/slices/categorySlice';
 import CategoryDropdown from './CategoryDropdown';
-import LanguageSwitcher from './LanguageSwitcher';
-import { Heart, ShoppingBag } from 'lucide-react';
+import { Heart, ShoppingBag, Store } from 'lucide-react';
 import images from '@/assets';
 import useTreeCategory from '@/hooks/data/useTreeCategories';
 
@@ -33,7 +32,7 @@ const Header = () => {
       <header className={`w-full`}>
         <div className={`fixed py-1 top-0 left-0 left-1/2 z-50 h-12 w-full -translate-x-1/2 transform
                         ${!openDropdown && location.pathname == '/'  ? 'text-white' : 'text-black bg-white shadow-lg '}`}>
-          <div className='flex items-center justify-between h-full px-50'>
+          <div className='flex items-center justify-between h-full sm:px-16 md:px-24 lg:px-36 xl:px-50'>
             <div className='h-full'>
               <img className='block object-cover h-full' src={images.logo} alt='uniform' />
             </div>
@@ -51,7 +50,10 @@ const Header = () => {
             </nav>
 
             <div className='flex items-center space-x-6'>
-              <LanguageSwitcher />
+              {/* <LanguageSwitcher /> */}
+              <Link to='/products'>
+                <Store size={24} />
+              </Link>
               <Link to='/wishlist'>
                 <Heart size={24} />
               </Link>

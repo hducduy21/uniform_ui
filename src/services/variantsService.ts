@@ -1,3 +1,4 @@
+import { VariantPriceRequest } from '@/components/modules/product/creation/VariantForm';
 import { api, authApi } from '@/configs/axios';
 import { ProductVariantType } from '@/types/model';
 import { AxiosError } from 'axios';
@@ -19,10 +20,10 @@ const variantsService = {
 
   updateVariants: async (
     productId: string,
-    productVariantCostPriceMap: Map<number, number>
+    productVariantCostPriceMap: VariantPriceRequest[]
   ): Promise<void> => {
     try {
-      await authApi.put(`/admin/products/${productId}/variants/price`, { productVariantCostPriceMap });
+      await authApi.put(`/admin/products/${productId}/variants/price`, { productVariantCostPrice: productVariantCostPriceMap });
     } catch (error) {
       if (error instanceof AxiosError && error.response) {
         throw new Error(

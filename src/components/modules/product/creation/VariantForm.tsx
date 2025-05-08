@@ -12,14 +12,18 @@ import useVariant from "@/hooks/data/useVariant"
 
 const {  Text } = Typography
 
+export type VariantPriceRequest = {
+  productVariantId: number
+  costPrice: number
+}
+
 const VariantsForm = ({id}: {id: string}) => {
 	const {variant, updateVariant, isUpdating} = useVariant(id)
-	const [editedVariants, setEditedVariants] = useState<Map<number, number>>(new Map())
+	const [editedVariants, setEditedVariants] = useState<VariantPriceRequest[]>([])
 
 	const handleUpdateVariantPrice = async () => {
 		await updateVariant(id, editedVariants)
 	}
-
 
   const columns = [
     {
@@ -51,14 +55,15 @@ const VariantsForm = ({id}: {id: string}) => {
       title: "Price",
       dataIndex: "costPrice",
       key: "costPrice",
-      render: (price: number, record: ProductVariantType) => <Input type="number" defaultValue={price} onChange={(event) => {
-						const newPrice = parseFloat(event.target.value);
-						setEditedVariants((prev) => {
-							const newMap = new Map(prev); 
-							newMap.set(record.id, newPrice); 
-							return newMap;
-						});
-			}} />,
+      render: (price: number, record: ProductVariantType) => 
+      <Input type="number" 
+            defaultValue={price} 
+            onChange={(event) => {
+              const newPrice = parseFloat(event.target.value);
+              setEditedVariants(prev => ([...prev, {productVariantId: record.id, costPrice: newPrice}]))
+            }}
+            
+			 />,
     },
   ]
 
@@ -73,7 +78,7 @@ const VariantsForm = ({id}: {id: string}) => {
       <Table dataSource={variant || []} columns={columns} rowKey="id" pagination={false} bordered />
 			<div className='flex justify-end mt-4'>
         <Button type='primary' loading={isUpdating} onClick={handleUpdateVariantPrice}>
-          Upload
+          Submit
         </Button>
       </div>
     </Card>

@@ -13,26 +13,21 @@ const ImageUploadForm = ({
   setUploaded,
 }: {
   id: string | null;
-  uploaded: boolean;
-  setUploading: (uploading: boolean) => void;
-  setUploaded: () => void;
+  uploaded?: boolean;
+  setUploading?: (uploading: boolean) => void;
+  setUploaded?: () => void;
 }) => {
   const [file, setFile] = useState<File | null>(null);
   const { uploadProductImage, isUploading } = useManageProduct({});
 
   const handleUpload = async () => {
     if (!file || !id) return;
-    try {
-      await uploadProductImage(id as string, file);
-      setUploaded();
-			console.log('Image uploaded successfully');
-    } catch (error) {
-      console.error('Error uploading image:', error);
-    }
+    await uploadProductImage(id as string, file);
+    setUploaded?.();
   };
 
   useEffect(() => {
-    setUploading(isUploading);
+    setUploading?.(isUploading);
   }, [isUploading]);
 
   const props: UploadProps = {
@@ -62,7 +57,7 @@ const ImageUploadForm = ({
       </Dragger>
       <div className='flex justify-end mt-4'>
         <Button type='primary' disabled={uploaded} loading={isUploading} onClick={handleUpload}>
-          Upload
+          Submit
         </Button>
       </div>
     </Card>

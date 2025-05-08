@@ -23,13 +23,13 @@ export type ProductFilterType = {
 }
 
 export type FilterType = {
-  category: string | undefined;
-  status: string | undefined;
-  minPrice: string | undefined;
-  maxPrice: string | undefined;
-  search: string | undefined;
-  sortBy: string | undefined;
-  direction: 'ASC' | 'DESC' | undefined;
+  category?: string | undefined;
+  status?: string | undefined;
+  minPrice?: string | undefined;
+  maxPrice?: string | undefined;
+  search?: string | undefined;
+  sortBy?: string | undefined;
+  direction?: 'ASC' | 'DESC' | undefined;
 };
 
 export type ErrorType<T> = Partial<Record<keyof T, string>>;

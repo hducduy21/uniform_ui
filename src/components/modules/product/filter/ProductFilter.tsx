@@ -9,6 +9,7 @@ import { ProductFilterType } from '@/types/utils';
 interface ProductFilterProps {
   onFilterChange: (filters: ProductFilterType) => void;
   initialFilters?: ProductFilterType;
+  clearFilters?: () => void;
 }
 
 const ProductFilter: React.FC<ProductFilterProps> = ({
@@ -40,6 +41,7 @@ const ProductFilter: React.FC<ProductFilterProps> = ({
 
   const clearFilters = useCallback(() => {
     setFilters({search: [], categories: [], status: [], priceRange: null });
+    onFilterChange({search: [], categories: [], status: [], priceRange: null });
   }, []);
 
   const clearFilterType = useCallback((filterType: keyof ProductFilterType) => {

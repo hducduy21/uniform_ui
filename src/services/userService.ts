@@ -21,12 +21,12 @@ const userService = {
   },
 
   lockUser: async (userId: string) => {
-    const response = await authApi.patch(`/users/${userId}/lock`);
+    const response = await authApi.patch(`/users/${userId}/lock?lock=true`);
     return response.data;
   },
 
   unlockUser: async (userId: string) => {
-    const response = await authApi.patch(`/users/${userId}/unlock`);
+    const response = await authApi.patch(`/users/${userId}/lock?lock=false`);
     return response.data;
   },
 

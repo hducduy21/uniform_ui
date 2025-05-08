@@ -29,17 +29,21 @@ const { Title } = Typography;
 type Color = Extract<GetProp<ColorPickerProps, 'value'>, string | { cleared: any }>;
 
 const GeneralInfoForm = ({
+  id,
   form,
   submited = false,
   setSubmited,
   setId,
   setSubmiting,
+  type
 }: {
+  id?: string | null;
   form: FormInstance<ProductRequest>;
   submited?: boolean;
   setSubmited?: () => void;
   setId?: (id: string) => void;
   setSubmiting?: (submiting: boolean) => void;
+  type?: 'create' | 'update';
 }) => {
   const [selectedColors, setSelectedColors] = useState<string[]>(
     form.getFieldValue('hexColors') || []
@@ -48,7 +52,7 @@ const GeneralInfoForm = ({
   const [colorPicked, setColorPicked] = useState<string[]>([]);
   const { sizes } = useSize();
   const { categories } = useCategory();
-  const { createProduct, isCreating } = useManageProduct({});
+  const { createProduct, updateProduct, isCreating,  isUpdating} = useManageProduct({});
 
   //Update product when form values change
   useEffect(() => {
@@ -57,8 +61,8 @@ const GeneralInfoForm = ({
 
   //Update submiting state when loading state changes
   useEffect(() => {
-    setSubmiting?.(isCreating);
-  }, [isCreating]);
+    setSubmiting?.(isCreating || isUpdating);
+  }, [isCreating || isUpdating]);
 
   const hexString = useMemo<string>(
     () => (typeof colorPicking === 'string' ? colorPicking : colorPicking.toHexString()),
@@ -66,10 +70,23 @@ const GeneralInfoForm = ({
   );
 
   const handleFinish = async () => {
-    const idCreated = await createProduct(form.getFieldsValue());
-    setId?.(idCreated);
-    setSubmited?.();
+    if(type === 'create') {
+      const idCreated = await createProduct(form.getFieldsValue());
+      setId?.(idCreated);
+      setSubmited?.();
+    }
+    if(type === 'update' && id) {
+      await updateProduct(id, form.getFieldsValue());
+      setSubmited?.();
+    }
   };
+
+  const watchedColors = Form.useWatch('hexColors', form);
+  useEffect(() => {
+    if (watchedColors) {
+      setSelectedColors(watchedColors);
+    }
+  }, [watchedColors]);
 
   return (
     <Card>
@@ -238,8 +255,8 @@ const GeneralInfoForm = ({
         </Form.Item>
 
         <Form.Item label={null} className='flex justify-end w-full'>
-          <Button type='primary' htmlType='submit' disabled={submited} loading={isCreating}>
-            Create
+          <Button type='primary' htmlType='submit' disabled={submited} loading={isCreating || isUpdating}>
+            Submit
           </Button>
         </Form.Item>
       </Form>

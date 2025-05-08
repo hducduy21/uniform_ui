@@ -94,6 +94,20 @@ const productService = {
     }
   },
 
+  updateProduct: async (id: string,request: ProductRequest) => {
+    try {
+      const response = await authApi.put<string>(`/admin/products/${id}`, request);
+      return response.data;
+    } catch (error) {
+      if (error instanceof AxiosError && error.response) {
+        throw new Error(
+          error.response.data.data?.[0] || error.response.data.message || 'Update product failed'
+        );
+      }
+      throw new Error('Update product failed, please try again');
+    }
+  },
+
   uploadProductImage: async (id: string, file: File) => {
     try {
       const formData = new FormData();

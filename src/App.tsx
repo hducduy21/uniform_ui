@@ -36,7 +36,6 @@ function App() {
               <Route path='products/:id' element={<ProductDetailManagement />} />
               <Route path='products' element={<ProductManagement />} />
               <Route path='categories' element={<CategoryManagement />} />
-              <Route path='inventory' element={<InventoryManagement />} />
               <Route path='size' element={<SizeGroupManagement />} />
               <Route path='customers' element={<CustomerManagement />} />
             </Route>
@@ -46,7 +45,7 @@ function App() {
           <Route path='/' element={<Layout />}>
             <Route index element={<Home />} />
             <Route path='products' element={<Products />} />
-            <Route path='product/:id' element={<ProductDetail />} />
+            <Route path='products/:id' element={<ProductDetail />} />
 
             <Route element={<PrivateRoute />}>
               <Route path='account' element={<AccountLayout />}>
