@@ -53,15 +53,14 @@ export interface ProductVariantType {
   product: Partial<ProductType>
   size: string
   color: string
-  imageUrl: string
   costPrice: number
   quantityInStock: number
 }
 
 export interface CartType {
-  id: string
+  id: number
   quantity: number
-  productVariant: ProductVariantType
+  productVariants: ProductVariantType
 }
 
 export interface ColorType{

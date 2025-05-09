@@ -13,7 +13,7 @@ import {
   Modal,
 } from 'antd';
 import { SearchOutlined, ReloadOutlined, EyeOutlined } from '@ant-design/icons';
-import { ProductGeneralAdminType, ProductStatus } from '@/types/model';
+import { ProductGeneralAdminType, ProductStatus, ProductType } from '@/types/model';
 import { useManageProduct } from '@/hooks/data/useManageProduct';
 import useCategory from '@/hooks/data/useCategory';
 import { FilterType } from '@/types/utils';
@@ -78,6 +78,8 @@ const ProductManagement: React.FC = () => {
     selectedRowKeys[0]
   };
 
+  console.log(products)
+
   const columns = [
     {
       title: 'Code',
@@ -94,7 +96,7 @@ const ProductManagement: React.FC = () => {
       title: 'Price',
       dataIndex: 'price',
       key: 'price',
-      render: (price: number) => `$${price.toFixed(2)}`,
+      render: (price: number) => `$${price}`,
     },
     {
       title: 'Status',
@@ -128,12 +130,13 @@ const ProductManagement: React.FC = () => {
       title: 'Rating',
       dataIndex: 'rating',
       key: 'rating',
-      render: (rating: number) => rating.toFixed(1),
+      render: (_: any, record: ProductType) => record.ratingCounter?.averageRating,
     },
     {
       title: 'Total Rates',
       dataIndex: 'totalRates',
       key: 'totalRates',
+      render: (_: any, record: ProductType) => record.ratingCounter?.totalReviews,
     },
     {
       title: 'Action',

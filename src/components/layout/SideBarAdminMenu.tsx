@@ -1,22 +1,14 @@
 import { Button, Menu } from 'antd';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 import {
-  DashboardOutlined,
   ShoppingOutlined,
   AppstoreOutlined,
   UserOutlined,
-  InboxOutlined,
 } from '@ant-design/icons';
 import { Ruler } from 'lucide-react';
 import { JSX, useEffect } from 'react';
 
 const menuItems = [
-  {
-    key: '/admin/dashboard',
-    icon: <DashboardOutlined />,
-    label: 'Dashboard',
-    headerLabel: 'Dashboard',
-  },
   {
     key: '/admin/products',
     icon: <ShoppingOutlined />,

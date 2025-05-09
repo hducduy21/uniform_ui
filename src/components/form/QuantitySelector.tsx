@@ -9,7 +9,7 @@ const QuantitySelector = (props: QuantitySelectorProps) => {
     return (
         <div className="relative w-32">
             <select
-                value={props.value}
+                defaultValue={props.value}
                 onChange={(e) => props.onChange(Number.parseInt(e.target.value))}
                 className="w-full py-2 pl-3 pr-8 border border-gray-300 appearance-none"
             >

@@ -1,4 +1,4 @@
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import Home from './pages/Home';
 import Layout from './layouts/DefaultLayout';
 import Products from './pages/Products';
@@ -16,12 +16,12 @@ import AdminLayout from './layouts/AdminLayout';
 import ProductManagement from './pages/admin/ProductsManagement';
 import ProductCreation from './pages/admin/ProductCreation';
 import CategoryManagement from './pages/admin/CategoryManagement';
-import { InventoryManagement } from './pages/admin/InventoryManagement';
 import SizeGroupManagement from './pages/admin/SizeGroupManagement';
 import ProductDetailManagement from './pages/admin/ProductDetailManagement';
 import CustomerManagement from './pages/admin/CustomerManagement';
 import PrivateAdminRoute from './layouts/PrivateAdminRoute';
 import ErrorBoundary from './components/ErrorBounary';
+import NotFound from './pages/NotFound';
 
 function App() {
   return (
@@ -31,10 +31,10 @@ function App() {
           {/* Admin Routes */}
           <Route path='admin' element={<AdminLayout />}>
             <Route element={<PrivateAdminRoute />}>
-              <Route index path='dashboard' element={<></>} />
+              <Route index element={<Navigate to="products" replace />} />
+              <Route path='products' element={<ProductManagement />} />
               <Route path='products/creation' element={<ProductCreation />} />
               <Route path='products/:id' element={<ProductDetailManagement />} />
-              <Route path='products' element={<ProductManagement />} />
               <Route path='categories' element={<CategoryManagement />} />
               <Route path='size' element={<SizeGroupManagement />} />
               <Route path='customers' element={<CustomerManagement />} />
@@ -59,6 +59,7 @@ function App() {
             <Route path='login' element={<Login />} />
             <Route path='register' element={<Register />} />
           </Route>
+          <Route path='*' element={<NotFound></NotFound>} />
         </Routes>
       </AuthProvider>
     </ErrorBoundary>

@@ -10,6 +10,8 @@ import useRating from '@/hooks/data/useRating';
 import { Modal } from 'antd';
 import { useAuthContext } from '@/context/AuthContext';
 import { toast } from 'react-toastify';
+import useCarts from '@/hooks/data/useCarts';
+import Button from '@/components/form/Button';
 const host = import.meta.env.VITE_BE_BASE_URL;
 
 const ProductDetail = () => {
@@ -22,6 +24,7 @@ const ProductDetail = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const { myRating, rateProduct, mutate } = useRating(id as string);
   const { isAuthenticated } = useAuthContext();
+  const { addToCarts } = useCarts();
 
   // Get user's rating value if the user is authenticated
   const [rating, setRating] = useState(0);
@@ -53,6 +56,14 @@ const ProductDetail = () => {
 
   const handleCloseModal = () => {
     setIsModalVisible(false);
+  };
+
+  const handleAddToCart = () => {
+    if (selectedVariant) {
+      addToCarts({ productVariantsId: selectedVariant.id, quantity: quantity });
+    } else {
+      toast.error('Please select a size and color');
+    }
   };
 
   const uniqueColors = useMemo(() => {
@@ -193,7 +204,13 @@ const ProductDetail = () => {
 
             {/* Add to Cart Button */}
             <div className='flex items-center justify-center mt-6'>
-              <button className='w-full py-3 font-medium text-white bg-black'>ADD TO CART</button>
+              <Button
+                disabled={selectedVariant==null}
+                onClick={handleAddToCart}
+                className='w-full py-3 font-medium text-white bg-black cursor-pointer'
+              >
+                ADD TO CART
+              </Button>
             </div>
           </div>
         </div>
